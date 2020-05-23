@@ -29,6 +29,7 @@ public class Main {
 		}
 		
 		Solution solution = new Solution(inst);
+		solution.positionGraphOnGrid();
 		
 		out.println(inst);
 		out.println(solution);
