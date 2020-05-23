@@ -4,6 +4,7 @@ import static java.lang.System.out;
 import java.io.IOException;
 
 import model.GraphInstance;
+import model.Solution;
 import util.InputParser;
 
 public class Main {
@@ -27,7 +28,10 @@ public class Main {
 			System.exit(-1);
 		}
 		
+		Solution solution = new Solution(inst);
+		
 		out.println(inst);
+		out.println(solution);
 	}
 
 }
