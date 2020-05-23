@@ -2,10 +2,10 @@ package util;
 
 import java.io.FileReader;
 import java.io.IOException;
-
 import java.io.Reader;
-
 import com.google.gson.Gson;
+
+import model.GraphInstance;
 
 public class InputParser {
 

@@ -1,11 +1,9 @@
 package main;
 
 import static java.lang.System.out;
-
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import util.GraphInstance;
+import model.GraphInstance;
 import util.InputParser;
 
 public class Main {
@@ -24,12 +22,11 @@ public class Main {
 
 		try {
 			inst = InputParser.readInstance(readPath);
-
 		} catch (IOException e) {
 			out.println("Sorry, file not found!");
 			System.exit(-1);
 		}
-
+		
 		out.println(inst);
 	}
 
