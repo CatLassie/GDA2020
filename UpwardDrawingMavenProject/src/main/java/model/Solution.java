@@ -8,6 +8,7 @@ public class Solution {
 	private int width;
 	private int height;
 	private ArrayList<HashMap<String, Integer>> nodes;
+	private ArrayList<HashMap<String, Integer>> edges;
 	private ArrayList<ArrayList<Integer>> adjacencyList;
 	private int[][] adjacencyMatrix;
 	private int cost;
@@ -24,8 +25,11 @@ public class Solution {
 			newNode.put("id", node.get("id"));
 			newNode.put("x", 0);
 			newNode.put("y", 0);
+			newNode.put("assigned", 0);
 			nodes.add(newNode);
 		}
+		
+		edges = inst.getEdges();
 
 		adjacencyList = new ArrayList<ArrayList<Integer>>();
 		for (int i = 0; i < inst.getNodes().size(); i++) {
@@ -49,7 +53,14 @@ public class Solution {
 		for (int i = 0; i <= height; i++) {
 			nextLayerNodes = getNextLayerNodes(nextLayerNodes);
 			for (int j = 0; j <= width; j++) {
-				// out.print(nextLayerNodes);
+				if (j < nextLayerNodes.size()) {
+					HashMap<String, Integer> node = nodes.get(nextLayerNodes.get(j));
+					if (node.get("assigned") == 0) {
+						node.put("x", j);
+						node.put("y", i);
+						node.put("assigned", 1);
+					}
+				}
 			}
 
 		}
@@ -58,36 +69,46 @@ public class Solution {
 	private ArrayList<Integer> getNextLayerNodes(ArrayList<Integer> sources) {
 		ArrayList<Integer> newSources = new ArrayList<Integer>();
 
-		// get subsequent layers
 		if (sources.size() > 0) {
+			// get subsequent layers
 			for (int i = 0; i < sources.size(); i++) {
-				ArrayList<Integer> targets = adjacencyList.get(sources.get(i));
-				for (int j = 0; j < targets.size(); j++) {
-					if (!newSources.contains(targets.get(j))) {
-						newSources.add(targets.get(j));
-					}
-				}
-			}
-			// get first layer
-		} else {
-			for (int i = 0; i < nodes.size(); i++) {
-				int nodeIdx = nodes.get(i).get("id");
-				boolean isNotTarget = true;
-				for (int j = 0; j < adjacencyList.size(); j++) {
-					ArrayList<Integer> targets = adjacencyList.get(j);
-					for (int k = 0; k < targets.size(); k++) {
-						if (targets.get(k) == nodeIdx) {
-							isNotTarget = false;
+				int source = sources.get(i);
+
+				int[] row = adjacencyMatrix[source];
+
+				for (int j = 0; j < row.length; j++) {
+					if (row[j] == 1) {
+						boolean allSourcesAssigned = true;
+						for (int k = 0; k < adjacencyMatrix.length; k++) {
+							if (adjacencyMatrix[k][j] == 1 && nodes.get(k).get("assigned") == 0) {
+								allSourcesAssigned = false;
+							}
+						}
+						if (allSourcesAssigned && !newSources.contains(j)) {
+							newSources.add(j);
 						}
 					}
 				}
-				if (isNotTarget) {
+			}
+
+		} else {
+			// get first layer
+			for (int i = 0; i < nodes.size(); i++) {
+				int nodeIdx = nodes.get(i).get("id");
+				boolean isTarget = false;
+				for (int j = 0; j < adjacencyMatrix.length; j++) {
+					int[] row = adjacencyMatrix[j];
+					if (row[nodeIdx] == 1) {
+						isTarget = true;
+					}
+				}
+				if (!isTarget) {
 					newSources.add(nodeIdx);
 				}
 			}
 		}
 
-		out.println(newSources);
+		// out.println(newSources);
 
 		return newSources;
 	}
@@ -98,6 +119,10 @@ public class Solution {
 
 	private void calculateCost() {
 		out.println("calculateCost()");
+	}
+	
+	public GraphInstance getGraphInstanceFromSolution() {
+		return new GraphInstance(width, height, nodes, edges);
 	}
 
 	public int getWidth() {
@@ -134,7 +159,8 @@ public class Solution {
 		String costPrint = "\n\tcost: " + cost;
 		String nodeNumberPrint = "\n\tnode number: " + nodes.size();
 		String nodesPrint = "\n\tnodes: " + nodes;
-		String edgesPrint = "\n\tedges: " + adjacencyList;
+		String edgesPrint = "\n\tedges: " + edges;
+		String adjacencyListPrint = "\n\tadjacency list: " + adjacencyList;
 
 		String matrixPrint = "\n\tmatrix: [";
 		for (int i = 0; i < adjacencyMatrix.length; i++) {
@@ -146,7 +172,7 @@ public class Solution {
 		}
 		matrixPrint += "\n\t\t]";
 
-		return "Solution:" + feasiblePrint + costPrint + nodesPrint + nodeNumberPrint + edgesPrint + matrixPrint;
+		return "Solution:" + feasiblePrint + costPrint + nodesPrint + nodeNumberPrint + edgesPrint + adjacencyListPrint + matrixPrint;
 	}
 
 }

@@ -6,17 +6,19 @@ import java.io.IOException;
 import model.GraphInstance;
 import model.Solution;
 import util.InputParser;
+import util.SolutionWriter;
 
 public class Main {
 
 	public static void main(String[] args) {
 
-		String fileName = "test_1";
+		String fileName = "auto_2";
 
 		String localDir = System.getProperty("user.dir").split("UpwardDrawingMavenProject")[0];
 		// String readPath = localDir + "\\instances\\vc-exact_"+instanceN+".gr";
 		// String writePath = localDir + "\\solutions\\vc-exact_"+instanceN+".gr";
 		String readPath = localDir + "instances\\" + fileName + ".json";
+		String writePath = localDir + "solutions\\" + fileName + "_solution.json";
 		// out.println(readPath);
 		
 		GraphInstance inst = null;
@@ -24,15 +26,24 @@ public class Main {
 		try {
 			inst = InputParser.readInstance(readPath);
 		} catch (IOException e) {
-			out.println("Sorry, file not found!");
+			out.println("Sorry, couldnt open file!");
 			System.exit(-1);
 		}
 		
 		Solution solution = new Solution(inst);
 		solution.positionGraphOnGrid();
 		
+		try {
+			SolutionWriter.writeSolution(writePath, solution.getGraphInstanceFromSolution());
+		} catch (IOException e) {
+			out.println("Sorry, couldnt write to file!");
+			System.exit(-1);
+		}
+		
+		
 		out.println(inst);
-		out.println(solution);
+		out.println("\n" + solution);
+		// out.println("\n"+ solution.getGraphInstanceFromSolution());
 	}
 
 }
