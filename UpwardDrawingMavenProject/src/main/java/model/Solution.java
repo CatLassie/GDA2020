@@ -10,6 +10,8 @@ public class Solution {
 	private ArrayList<HashMap<String, Integer>> nodes;
 	private ArrayList<HashMap<String, Integer>> edges;
 	private ArrayList<ArrayList<Integer>> adjacencyList;
+	// private ArrayList<HashMap<String, Integer>> nodesD;
+	// private int[][] adjacencyMatrixD;
 	private int[][] adjacencyMatrix;
 	private int cost;
 	private boolean isFeasible;
@@ -19,6 +21,7 @@ public class Solution {
 		height = inst.getHeight();
 
 		nodes = new ArrayList<HashMap<String, Integer>>();
+		// nodesD = new ArrayList<HashMap<String, Integer>>();
 		for (int i = 0; i < inst.getNodes().size(); i++) {
 			HashMap<String, Integer> node = inst.getNodes().get(i);
 			HashMap<String, Integer> newNode = new HashMap<String, Integer>();
@@ -27,6 +30,7 @@ public class Solution {
 			newNode.put("y", 0);
 			newNode.put("assigned", 0);
 			nodes.add(newNode);
+			// nodesD.add((HashMap)newNode.clone());
 		}
 		
 		edges = inst.getEdges();
@@ -41,10 +45,12 @@ public class Solution {
 		}
 
 		adjacencyMatrix = new int[nodes.size()][nodes.size()];
+		// adjacencyMatrixD = new int[nodes.size()][nodes.size()];
 
 		for (int i = 0; i < inst.getEdges().size(); i++) {
 			HashMap<String, Integer> edge = inst.getEdges().get(i);
 			adjacencyMatrix[edge.get("source")][edge.get("target")] = 1;
+			// adjacencyMatrixD[edge.get("source")][edge.get("target")] = 1;
 		}
 	}
 
@@ -55,6 +61,7 @@ public class Solution {
 			for (int j = 0; j <= width; j++) {
 				if (j < nextLayerNodes.size()) {
 					HashMap<String, Integer> node = nodes.get(nextLayerNodes.get(j));
+					// HashMap<String, Integer> node = nodesD.get(nextLayerNodes.get(j));
 					if (node.get("assigned") == 0) {
 						node.put("x", j);
 						node.put("y", i);
@@ -84,8 +91,24 @@ public class Solution {
 								allSourcesAssigned = false;
 							}
 						}
-						if (allSourcesAssigned && !newSources.contains(j)) {
-							newSources.add(j);
+						if(!newSources.contains(j)) {
+							if (allSourcesAssigned) {
+								// add normal node
+								newSources.add(j);
+							} else {
+								/*
+								// add dummy node								
+								HashMap<String, Integer> dummyNode = new HashMap<String, Integer>();
+								dummyNode.put("id", nodesD.size());
+								dummyNode.put("x", 0);
+								dummyNode.put("y", 0);
+								dummyNode.put("assigned", 0);
+								dummyNode.put("dummy", 1);
+								//TODO: dummyNode.put("sourceXCoord", )
+								nodesD.add(dummyNode);
+								newSources.add(nodesD.size());
+								*/
+							}
 						}
 					}
 				}
