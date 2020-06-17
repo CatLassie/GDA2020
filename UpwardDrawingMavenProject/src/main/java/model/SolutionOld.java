@@ -16,7 +16,7 @@ public class SolutionOld {
 	private int cost;
 	private boolean isFeasible;
 
-	public SolutionOld(GraphInstance inst) {
+	public SolutionOld(GraphInstanceOld inst) {
 		width = inst.getWidth();
 		height = inst.getHeight();
 
@@ -146,8 +146,8 @@ public class SolutionOld {
 		out.println("calculateCost()");
 	}
 	
-	public GraphInstance getGraphInstanceFromSolution() {
-		return new GraphInstance(width, height, nodes, edges);
+	public GraphInstanceOld getGraphInstanceFromSolution() {
+		return new GraphInstanceOld(width, height, nodes, edges);
 	}
 
 	public int getWidth() {

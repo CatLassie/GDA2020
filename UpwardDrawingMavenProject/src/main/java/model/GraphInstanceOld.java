@@ -3,16 +3,17 @@ package model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class GraphInstance {
+public class GraphInstanceOld {
 	private int width;
 	private int height;
-	private ArrayList<Node> nodes;
-	private ArrayList<Edge> edges;
+	private ArrayList<HashMap<String, Integer>> nodes;
+	private ArrayList<HashMap<String, Integer>> edges;
 
-	public GraphInstance() {
+	public GraphInstanceOld() {
 	}
 
-	public GraphInstance(int width, int height, ArrayList<Node> nodes, ArrayList<Edge> edges) {
+	public GraphInstanceOld(int width, int height, ArrayList<HashMap<String, Integer>> nodes,
+			ArrayList<HashMap<String, Integer>> edges) {
 		this.width = width;
 		this.height = height;
 		this.nodes = nodes;
@@ -30,24 +31,24 @@ public class GraphInstance {
 	public int getHeight() {
 		return height;
 	}
-
+	
 	public void setHeight(int height) {
 		this.height = height;
 	}
 
-	public ArrayList<Node> getNodes() {
+	public ArrayList<HashMap<String, Integer>> getNodes() {
 		return nodes;
 	}
-
-	public void setNodes(ArrayList<Node> nodes) {
+	
+	public void setNodes(ArrayList<HashMap<String, Integer>> nodes) {
 		this.nodes = nodes;
 	}
 
-	public ArrayList<Edge> getEdges() {
+	public ArrayList<HashMap<String, Integer>> getEdges() {
 		return edges;
 	}
-
-	public void setEdges(ArrayList<Edge> edges) {
+	
+	public void setEdges(ArrayList<HashMap<String, Integer>> edges) {
 		this.edges = edges;
 	}
 

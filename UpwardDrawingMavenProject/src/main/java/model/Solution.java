@@ -10,13 +10,11 @@ public class Solution {
 	private ArrayList<HashMap<String, Integer>> nodes;
 	private ArrayList<HashMap<String, Integer>> edges;
 	private ArrayList<ArrayList<Integer>> adjacencyList;
-	// private ArrayList<HashMap<String, Integer>> nodesD;
-	// private int[][] adjacencyMatrixD;
 	private int[][] adjacencyMatrix;
 	private int cost;
 	private boolean isFeasible;
 
-	public Solution(GraphInstance inst) {
+	public Solution(GraphInstanceOld inst) {
 		width = inst.getWidth();
 		height = inst.getHeight();
 
@@ -53,7 +51,7 @@ public class Solution {
 			// adjacencyMatrixD[edge.get("source")][edge.get("target")] = 1;
 		}
 	}
-
+	
 	public void positionGraphOnGrid() {
 		ArrayList<Integer> nextLayerNodes = new ArrayList<Integer>();
 		for (int i = 0; i <= height; i++) {
@@ -146,8 +144,8 @@ public class Solution {
 		out.println("calculateCost()");
 	}
 	
-	public GraphInstance getGraphInstanceFromSolution() {
-		return new GraphInstance(width, height, nodes, edges);
+	public GraphInstanceOld getGraphInstanceFromSolution() {
+		return new GraphInstanceOld(width, height, nodes, edges);
 	}
 
 	public int getWidth() {

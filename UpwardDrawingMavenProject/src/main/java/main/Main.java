@@ -12,7 +12,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		String fileName = "auto_2";
+		String fileName = "test_1_not_upward";
 
 		String localDir = System.getProperty("user.dir").split("UpwardDrawingMavenProject")[0];
 		// String readPath = localDir + "\\instances\\vc-exact_"+instanceN+".gr";
@@ -30,11 +30,13 @@ public class Main {
 			System.exit(-1);
 		}
 		
-		Solution solution = new Solution(inst);
-		solution.positionGraphOnGrid();
+		//Solution solution = new Solution(inst);
+		//solution.positionGraphOnGrid();
 		
+		// Write solution to file
 		try {
-			SolutionWriter.writeSolution(writePath, solution.getGraphInstanceFromSolution());
+			// SolutionWriter.writeSolution(writePath, solution.getGraphInstanceFromSolution());
+			SolutionWriter.writeSolution(writePath, inst);
 		} catch (IOException e) {
 			out.println("Sorry, couldnt write to file!");
 			System.exit(-1);
@@ -42,7 +44,7 @@ public class Main {
 		
 		
 		out.println(inst);
-		out.println("\n" + solution);
+		//out.println("\n" + solution);
 		// out.println("\n"+ solution.getGraphInstanceFromSolution());
 	}
 
