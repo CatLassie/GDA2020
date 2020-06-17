@@ -46,29 +46,29 @@ public class Solution {
 		}
 	}
 	
-	/*
+	
 	public void positionGraphOnGrid() {
 		ArrayList<Integer> nextLayerNodes = new ArrayList<Integer>();
 		for (int i = 0; i <= height; i++) {
 			nextLayerNodes = getNextLayerNodes(nextLayerNodes);
 			for (int j = 0; j <= width; j++) {
 				if (j < nextLayerNodes.size()) {
-					HashMap<String, Integer> node = nodes.get(nextLayerNodes.get(j));
+					Node node = nodes.get(nextLayerNodes.get(j));
 					// HashMap<String, Integer> node = nodesD.get(nextLayerNodes.get(j));
-					if (node.get("assigned") == 0) {
+					if (!node.assigned) {
 						// first check all dummy nodes and addthem (predecessor x has to be known to calculatenew x)
-						node.put("x", j);
-						node.put("y", i);
-						node.put("assigned", 1);
+						node.x = j;
+						node.y = i;
+						node.assigned = true;
 					}
 				}
 			}
 
 		}
 	}
-	*/
 	
-	/*
+	
+	
 	private ArrayList<Integer> getNextLayerNodes(ArrayList<Integer> sources) {
 		ArrayList<Integer> newSources = new ArrayList<Integer>();
 
@@ -77,13 +77,13 @@ public class Solution {
 			for (int i = 0; i < sources.size(); i++) {
 				int source = sources.get(i);
 
-				int[] row = adjacencyMatrix[source];
+				List<Integer> row = adjacencyMatrix.get(source);
 
-				for (int j = 0; j < row.length; j++) {
-					if (row[j] == 1) {
+				for (int j = 0; j < row.size(); j++) {
+					if (row.get(j) == 1) {
 						boolean allSourcesAssigned = true;
-						for (int k = 0; k < adjacencyMatrix.length; k++) {
-							if (adjacencyMatrix[k][j] == 1 && nodes.get(k).get("assigned") == 0) {
+						for (int k = 0; k < adjacencyMatrix.size(); k++) {
+							if (adjacencyMatrix.get(k).get(j) == 1 && !nodes.get(k).assigned) {
 								allSourcesAssigned = false;
 								// add dummy node here for each unassigned node
 							}
@@ -103,16 +103,16 @@ public class Solution {
 		} else {
 			// get first layer
 			for (int i = 0; i < nodes.size(); i++) {
-				int nodeIdx = nodes.get(i).get("id");
+				int nodeId = nodes.get(i).id;
 				boolean isTarget = false;
-				for (int j = 0; j < adjacencyMatrix.length; j++) {
-					int[] row = adjacencyMatrix[j];
-					if (row[nodeIdx] == 1) {
+				for (int j = 0; j < adjacencyMatrix.size(); j++) {
+					List<Integer> row = adjacencyMatrix.get(j);
+					if (row.get(nodeId) == 1) {
 						isTarget = true;
 					}
 				}
 				if (!isTarget) {
-					newSources.add(nodeIdx);
+					newSources.add(nodeId);
 				}
 			}
 		}
@@ -121,7 +121,7 @@ public class Solution {
 
 		return newSources;
 	}
-	*/
+	
 
 	private void calculateFeasibility() {
 		out.println("calculateFeasibility()");

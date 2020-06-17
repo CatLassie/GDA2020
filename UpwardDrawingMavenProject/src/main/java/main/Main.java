@@ -31,7 +31,7 @@ public class Main {
 		}
 		
 		Solution solution = new Solution(inst);
-		//solution.positionGraphOnGrid();
+		solution.positionGraphOnGrid();
 		
 		// Write solution to file
 		try {
@@ -44,7 +44,7 @@ public class Main {
 		
 		
 		out.println(inst);
-		out.println("\n"+ solution.getGraphInstanceFromSolution());
+		// out.println("\n"+ solution.getGraphInstanceFromSolution());
 		out.println("\n" + solution);
 	}
 
