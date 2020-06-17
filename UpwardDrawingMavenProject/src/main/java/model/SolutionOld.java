@@ -4,7 +4,7 @@ import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Solution {
+public class SolutionOld {
 	private int width;
 	private int height;
 	private ArrayList<HashMap<String, Integer>> nodes;
@@ -16,7 +16,7 @@ public class Solution {
 	private int cost;
 	private boolean isFeasible;
 
-	public Solution(GraphInstance inst) {
+	public SolutionOld(GraphInstance inst) {
 		width = inst.getWidth();
 		height = inst.getHeight();
 
