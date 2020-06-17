@@ -30,13 +30,13 @@ public class Main {
 			System.exit(-1);
 		}
 		
-		//Solution solution = new Solution(inst);
+		Solution solution = new Solution(inst);
 		//solution.positionGraphOnGrid();
 		
 		// Write solution to file
 		try {
-			// SolutionWriter.writeSolution(writePath, solution.getGraphInstanceFromSolution());
-			SolutionWriter.writeSolution(writePath, inst);
+			SolutionWriter.writeSolution(writePath, solution.getGraphInstanceFromSolution());
+			// SolutionWriter.writeSolution(writePath, inst);
 		} catch (IOException e) {
 			out.println("Sorry, couldnt write to file!");
 			System.exit(-1);
@@ -44,8 +44,8 @@ public class Main {
 		
 		
 		out.println(inst);
-		//out.println("\n" + solution);
-		// out.println("\n"+ solution.getGraphInstanceFromSolution());
+		out.println("\n"+ solution.getGraphInstanceFromSolution());
+		out.println("\n" + solution);
 	}
 
 }

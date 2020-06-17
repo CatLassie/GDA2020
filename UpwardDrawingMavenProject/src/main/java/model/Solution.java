@@ -3,55 +3,50 @@ package model;
 import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Solution {
 	private int width;
 	private int height;
-	private ArrayList<HashMap<String, Integer>> nodes;
-	private ArrayList<HashMap<String, Integer>> edges;
-	private ArrayList<ArrayList<Integer>> adjacencyList;
-	private int[][] adjacencyMatrix;
+	private ArrayList<Node> nodes;
+	private ArrayList<Edge> edges;
+	private List<List<Integer>> adjacencyMatrix;
 	private int cost;
 	private boolean isFeasible;
 
-	public Solution(GraphInstanceOld inst) {
+	public Solution(GraphInstance inst) {
 		width = inst.getWidth();
 		height = inst.getHeight();
 
-		nodes = new ArrayList<HashMap<String, Integer>>();
-		// nodesD = new ArrayList<HashMap<String, Integer>>();
+		nodes = new ArrayList<Node>();
 		for (int i = 0; i < inst.getNodes().size(); i++) {
-			HashMap<String, Integer> node = inst.getNodes().get(i);
-			HashMap<String, Integer> newNode = new HashMap<String, Integer>();
-			newNode.put("id", node.get("id"));
-			newNode.put("x", 0);
-			newNode.put("y", 0);
-			newNode.put("assigned", 0);
+			Node node = inst.getNodes().get(i);
+			Node newNode = new Node();
+			newNode.id = node.id;
+			newNode.x = 0;
+			newNode.y = 0;
 			nodes.add(newNode);
-			// nodesD.add((HashMap)newNode.clone());
 		}
 		
 		edges = inst.getEdges();
 
-		adjacencyList = new ArrayList<ArrayList<Integer>>();
-		for (int i = 0; i < inst.getNodes().size(); i++) {
-			adjacencyList.add(new ArrayList<Integer>());
-		}
-		for (int i = 0; i < inst.getEdges().size(); i++) {
-			HashMap<String, Integer> edge = inst.getEdges().get(i);
-			adjacencyList.get(edge.get("source")).add(edge.get("target"));
+		adjacencyMatrix = new ArrayList<List<Integer>>();
+		
+		for(int i = 0; i < nodes.size(); i++) {
+			List<Integer> row = new ArrayList<Integer>();
+			for(int j = 0; j < nodes.size(); j++) {
+				row.add(0);
+			}
+			adjacencyMatrix.add(row);
 		}
 
-		adjacencyMatrix = new int[nodes.size()][nodes.size()];
-		// adjacencyMatrixD = new int[nodes.size()][nodes.size()];
-
 		for (int i = 0; i < inst.getEdges().size(); i++) {
-			HashMap<String, Integer> edge = inst.getEdges().get(i);
-			adjacencyMatrix[edge.get("source")][edge.get("target")] = 1;
-			// adjacencyMatrixD[edge.get("source")][edge.get("target")] = 1;
+			Edge edge = inst.getEdges().get(i);
+			adjacencyMatrix.get(edge.source).set(edge.target, 1);
 		}
 	}
 	
+	/*
 	public void positionGraphOnGrid() {
 		ArrayList<Integer> nextLayerNodes = new ArrayList<Integer>();
 		for (int i = 0; i <= height; i++) {
@@ -71,7 +66,9 @@ public class Solution {
 
 		}
 	}
-
+	*/
+	
+	/*
 	private ArrayList<Integer> getNextLayerNodes(ArrayList<Integer> sources) {
 		ArrayList<Integer> newSources = new ArrayList<Integer>();
 
@@ -96,18 +93,7 @@ public class Solution {
 								// add normal node
 								newSources.add(j);
 							} else {
-								/*
-								// add dummy node								
-								HashMap<String, Integer> dummyNode = new HashMap<String, Integer>();
-								dummyNode.put("id", nodesD.size());
-								dummyNode.put("x", 0);
-								dummyNode.put("y", 0);
-								dummyNode.put("assigned", 0);
-								dummyNode.put("dummy", 1);
-								//TODO: dummyNode.put("sourceXCoord", )
-								nodesD.add(dummyNode);
-								newSources.add(nodesD.size());
-								*/
+	
 							}
 						}
 					}
@@ -135,6 +121,7 @@ public class Solution {
 
 		return newSources;
 	}
+	*/
 
 	private void calculateFeasibility() {
 		out.println("calculateFeasibility()");
@@ -144,8 +131,9 @@ public class Solution {
 		out.println("calculateCost()");
 	}
 	
-	public GraphInstanceOld getGraphInstanceFromSolution() {
-		return new GraphInstanceOld(width, height, nodes, edges);
+	public GraphInstance getGraphInstanceFromSolution() {
+		// TODO: removed dummy nodes
+		return new GraphInstance(width, height, nodes, edges);
 	}
 
 	public int getWidth() {
@@ -156,15 +144,11 @@ public class Solution {
 		return height;
 	}
 
-	public ArrayList<HashMap<String, Integer>> getNodes() {
+	public ArrayList<Node> getNodes() {
 		return nodes;
 	}
 
-	public ArrayList<ArrayList<Integer>> getAdjacencyList() {
-		return adjacencyList;
-	}
-
-	public int[][] getAdjacencyMatrix() {
+	public List<List<Integer>> getAdjacencyMatrix() {
 		return adjacencyMatrix;
 	}
 
@@ -183,19 +167,18 @@ public class Solution {
 		String nodeNumberPrint = "\n\tnode number: " + nodes.size();
 		String nodesPrint = "\n\tnodes: " + nodes;
 		String edgesPrint = "\n\tedges: " + edges;
-		String adjacencyListPrint = "\n\tadjacency list: " + adjacencyList;
 
 		String matrixPrint = "\n\tmatrix: [";
-		for (int i = 0; i < adjacencyMatrix.length; i++) {
-			int[] row = adjacencyMatrix[i];
+		for (int i = 0; i < adjacencyMatrix.size(); i++) {
+			List<Integer> row = adjacencyMatrix.get(i);
 			matrixPrint += "\n\t\t ";
-			for (int j = 0; j < row.length; j++) {
-				matrixPrint += row[j] + " ";
+			for (int j = 0; j < row.size(); j++) {
+				matrixPrint += row.get(j) + " ";
 			}
 		}
 		matrixPrint += "\n\t\t]";
 
-		return "Solution:" + feasiblePrint + costPrint + nodesPrint + nodeNumberPrint + edgesPrint + adjacencyListPrint + matrixPrint;
+		return "Solution:" + feasiblePrint + costPrint + nodesPrint + nodeNumberPrint + edgesPrint  + matrixPrint;
 	}
 
 }

@@ -5,6 +5,7 @@ public class Node {
 	public int x;
 	public int y;
 
+	public boolean assigned = false;
 	public boolean dummy = false;
 	public int predX = -1;
 	
