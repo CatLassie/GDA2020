@@ -2,7 +2,6 @@ package model;
 
 import static java.lang.System.out;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Solution {
@@ -17,7 +16,8 @@ public class Solution {
 	public Solution(GraphInstance inst) {
 		width = inst.getWidth();
 		height = inst.getHeight();
-
+		
+		// Set Nodes
 		nodes = new ArrayList<Node>();
 		for (int i = 0; i < inst.getNodes().size(); i++) {
 			Node node = inst.getNodes().get(i);
@@ -28,10 +28,11 @@ public class Solution {
 			nodes.add(newNode);
 		}
 		
+		// Set Edges
 		edges = inst.getEdges();
-
-		adjacencyMatrix = new ArrayList<List<Integer>>();
 		
+		// Calculate Adjacency Matrix
+		adjacencyMatrix = new ArrayList<List<Integer>>();
 		for(int i = 0; i < nodes.size(); i++) {
 			List<Integer> row = new ArrayList<Integer>();
 			for(int j = 0; j < nodes.size(); j++) {
@@ -39,7 +40,6 @@ public class Solution {
 			}
 			adjacencyMatrix.add(row);
 		}
-
 		for (int i = 0; i < inst.getEdges().size(); i++) {
 			Edge edge = inst.getEdges().get(i);
 			adjacencyMatrix.get(edge.source).set(edge.target, 1);
