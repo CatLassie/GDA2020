@@ -53,7 +53,7 @@ public class Solution {
 			nextLayerNodes = getNextLayerNodes(nextLayerNodes);
 			for (int j = 0; j <= width; j++) {
 				if (j < nextLayerNodes.size()) {
-					Node node = nodes.get(nextLayerNodes.get(j)); // more like find by id but ok for now
+					Node node = nodes.get(nextLayerNodes.get(j)); //TODO: more like find by id but ok for now
 					
 					// DEBUG
 					// if not equal, the alg. will break!!!
@@ -81,9 +81,9 @@ public class Solution {
 		if (sources.size() > 0) {
 			// get subsequent layers
 			for (int i = 0; i < sources.size(); i++) {
-				int source = sources.get(i);
+				int sourceId = sources.get(i);
 
-				List<Integer> row = adjacencyMatrix.get(source);
+				List<Integer> row = adjacencyMatrix.get(sourceId);
 
 				for (int j = 0; j < row.size(); j++) {
 					if (row.get(j) == 1) {
@@ -91,7 +91,7 @@ public class Solution {
 						for (int k = 0; k < adjacencyMatrix.size(); k++) {
 							if (adjacencyMatrix.get(k).get(j) == 1 && !nodes.get(k).assigned) {
 								allSourcesAssigned = false;
-								// add dummy node here for each unassigned node
+								// add dummy node here for each unassigned node; NOOOOO!!!!
 							}
 						}
 						if(!newSources.contains(j)) {
@@ -99,7 +99,8 @@ public class Solution {
 								// add normal node
 								newSources.add(j);
 							} else {
-	
+								// add dummy node
+								addDummyNode(newSources, sourceId, j);
 							}
 						}
 					}
@@ -126,6 +127,34 @@ public class Solution {
 		// out.println(newSources);
 
 		return newSources;
+	}
+	
+	private void addDummyNode(ArrayList<Integer> newSources, int sourceId, int targetId) {
+		// create dummy node and add it to nodes and sources
+		// TODO: should find by id!!!
+		Node source = nodes.get(sourceId);
+		Node newDummy = new Node();
+		newDummy.id = nodes.size();
+		newDummy.dummy = true;
+		newDummy.predX = source.x;
+		nodes.add(newDummy);
+		newSources.add(newDummy.id);
+		
+		// update adjacency matrix by rerouting edge through dummy node
+		// add new column
+		for(int i = 0; i < adjacencyMatrix.size(); i++) {
+			adjacencyMatrix.get(i).add(0);
+		}
+		// add new row
+		List<Integer> newRow = new ArrayList<Integer>();
+		for(int i = 0; i < nodes.size(); i++) {
+			newRow.add(0);
+		}
+		adjacencyMatrix.add(newRow);
+		// re-arrange adjacency matrix
+		adjacencyMatrix.get(sourceId).set(targetId, 0);
+		adjacencyMatrix.get(sourceId).set(newDummy.id, 1);
+		adjacencyMatrix.get(newDummy.id).set(targetId, 1);
 	}
 	
 
