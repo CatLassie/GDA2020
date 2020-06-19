@@ -53,6 +53,6 @@ public class GraphInstance {
 	@Override
 	public String toString() {
 		return "GrapthInstance: \n	width=" + width + ",\n	height=" + height + ",\n	nodes=" + nodes + ",\n	edges="
-				+ edges + "]";
+				+ edges;
 	}
 }
