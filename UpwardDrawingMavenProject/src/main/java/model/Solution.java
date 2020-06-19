@@ -53,8 +53,14 @@ public class Solution {
 			nextLayerNodes = getNextLayerNodes(nextLayerNodes);
 			for (int j = 0; j <= width; j++) {
 				if (j < nextLayerNodes.size()) {
-					Node node = nodes.get(nextLayerNodes.get(j));
-					// HashMap<String, Integer> node = nodesD.get(nextLayerNodes.get(j));
+					Node node = nodes.get(nextLayerNodes.get(j)); // more like find by id but ok for now
+					
+					// DEBUG
+					// if not equal, the alg. will break!!!
+					// boolean equal = nextLayerNodes.get(j) == node.id;
+					// out.println("node idx: " + nextLayerNodes.get(j) + " == node id: " + node.id +" "+ equal );
+					//
+
 					if (!node.assigned) {
 						// first check all dummy nodes and addthem (predecessor x has to be known to calculatenew x)
 						node.x = j;
