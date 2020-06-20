@@ -7,17 +7,18 @@ public class Node {
 
 	public boolean assigned = false;
 	public boolean dummy = false;
-	public int predX = -1;
-	
+	public Node pred = null;
+	public Node succ = null;
+	/*
 	@Override
 	public String toString() {
 		return "{id=" + id + ", x=" + x + ", y=" + y + "}";
 	}
+	*/
 	
-	/*
 	@Override
 	public String toString() {
-		return "{id=" + id + ", x=" + x + ", y=" + y + ", dummy=" + dummy + ", predX=" + predX + "}";
+		return "{id=" + id + ", x=" + x + ", y=" + y + ", dummy=" + dummy + "}";
 	}
-	*/
+	
 }

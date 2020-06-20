@@ -51,6 +51,11 @@ public class Solution {
 		ArrayList<Integer> nextLayerNodes = new ArrayList<Integer>();
 		for (int i = 0; i <= height; i++) {
 			nextLayerNodes = getNextLayerNodes(nextLayerNodes);
+			
+			// currently occupied position on layer
+			boolean[] occupiedX = new boolean[width+1];
+			
+			// straight lines get priority assignment
 			for (int j = 0; j <= width; j++) {
 				if (j < nextLayerNodes.size()) {
 					Node node = nodes.get(nextLayerNodes.get(j)); //TODO: more like find by id but ok for now
@@ -60,10 +65,76 @@ public class Solution {
 					// boolean equal = nextLayerNodes.get(j) == node.id;
 					// out.println("node idx: " + nextLayerNodes.get(j) + " == node id: " + node.id +" "+ equal );
 					//
-
-					if (!node.assigned) {
+					
+					if (!node.assigned && node.dummy && node.pred.dummy) {
+						int diff = node.pred.x - node.pred.pred.x;
+						int x = node.pred.x + diff;
+						out.println(i+1 + " " + node.pred.x + " " + node.pred.pred.x);
+						if(occupiedX[x] || x > width || x < 0) {
+							out.println("Sorry, couldnt position dummy node " + node.id + " on straight line");
+							System.exit(-1);
+						}
+						node.x = x;
+						occupiedX[x] = true;
+						node.y = i;
+						node.assigned = true;
+					}
+				}
+			}
+			
+			// dummy nodes get second priority assignment
+			for (int j = 0; j <= width; j++) {
+				if (j < nextLayerNodes.size()) {
+					Node node = nodes.get(nextLayerNodes.get(j)); //TODO: more like find by id but ok for now
+					
+					// DEBUG
+					// if not equal, the alg. will break!!!
+					// boolean equal = nextLayerNodes.get(j) == node.id;
+					// out.println("node idx: " + nextLayerNodes.get(j) + " == node id: " + node.id +" "+ equal );
+					//
+					
+					if (!node.assigned && node.dummy && !node.pred.dummy) {				
+						// find a position for dummy node as close to pred x as possible
+						int x = node.pred.x;
+						int offset = 1;
+						while(occupiedX[x] || x > width || x < 0) {
+							x = offset % 2 == 1 ? x + offset : x - offset;
+							if(offset > width) {
+								out.println("Sorry, couldnt find a position for dummy node " + node.id);
+								System.exit(-1);
+							}
+						}
+						node.x = x;
+						occupiedX[x] = true;
+						node.y = i;
+						node.assigned = true;
+					}
+				}
+			}
+			
+			// normal nodes get assigned last
+			for (int j = 0; j <= width; j++) {
+				if (j < nextLayerNodes.size()) {
+					Node node = nodes.get(nextLayerNodes.get(j)); //TODO: more like find by id but ok for now
+					
+					// DEBUG
+					// if not equal, the alg. will break!!!
+					// boolean equal = nextLayerNodes.get(j) == node.id;
+					// out.println("node idx: " + nextLayerNodes.get(j) + " == node id: " + node.id +" "+ equal );
+					//
+					
+					if (!node.assigned && !node.dummy) {
 						// first check all dummy nodes and addthem (predecessor x has to be known to calculatenew x)
-						node.x = j;
+						int x = 0;
+						while(occupiedX[x]) {
+							if(x > width) {
+								out.println("Sorry, couldnt find a position for node " + node.id);
+								System.exit(-1);
+							}
+							x++;
+						}
+						node.x = x;
+						occupiedX[x] = true;
 						node.y = i;
 						node.assigned = true;
 					}
@@ -136,7 +207,13 @@ public class Solution {
 		Node newDummy = new Node();
 		newDummy.id = nodes.size();
 		newDummy.dummy = true;
-		newDummy.predX = source.x;
+		
+		// all dummy nodes have a pred, and all except last dummy have a succ
+		newDummy.pred = source;
+		if(source.dummy) {
+			source.succ = newDummy;
+		}
+		
 		nodes.add(newDummy);
 		newSources.add(newDummy.id);
 		
@@ -167,8 +244,15 @@ public class Solution {
 	}
 	
 	public GraphInstance getGraphInstanceFromSolution() {
-		// TODO: removed dummy nodes
-		return new GraphInstance(width, height, nodes, edges);
+		// filter out dummy nodes
+		ArrayList<Node> originalNodes = new ArrayList<Node>();
+		for(int i = 0; i < nodes.size(); i++) {
+			Node node = nodes.get(i);
+			if(!node.dummy) {
+				originalNodes.add(node);
+			} 
+		}
+		return new GraphInstance(width, height, originalNodes, edges);
 	}
 
 	public int getWidth() {
