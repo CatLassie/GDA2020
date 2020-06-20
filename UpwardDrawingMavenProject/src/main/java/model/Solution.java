@@ -70,6 +70,14 @@ public class Solution {
 		for (int i = 0; i < adjacencyMatrix.size(); i++) {
 			List<Integer> row = adjacencyMatrix.get(i);
 			if (row.get(nodeId) == 1) {
+				
+				// add predecessor
+				Node node = nodes.get(nodeId);
+				Node pred = nodes.get(i);
+				if(!node.pred.contains(pred)) {
+					node.pred.add(pred);	
+				}
+				
 				int newDepth = yRecursion(i, currentDepth + 1);
 				if(newDepth > maxDepth) {
 					maxDepth = newDepth;
