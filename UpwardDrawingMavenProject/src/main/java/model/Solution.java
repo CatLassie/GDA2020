@@ -188,10 +188,10 @@ public class Solution {
 			for (int i = 0; i < sources.size(); i++) {
 				int sourceId = sources.get(i);
 
-				List<Integer> row = adjacencyMatrix.get(sourceId);
+				List<Integer> sourceRow = adjacencyMatrix.get(sourceId);
 
-				for (int j = 0; j < row.size(); j++) {
-					if (row.get(j) == 1) {
+				for (int j = 0; j < sourceRow.size(); j++) {
+					if (sourceRow.get(j) == 1) {
 						boolean allSourcesAssigned = true;
 						for (int k = 0; k < adjacencyMatrix.size(); k++) {
 							if (adjacencyMatrix.get(k).get(j) == 1 && !nodes.get(k).assigned) {
@@ -214,18 +214,9 @@ public class Solution {
 
 		} else {
 			// get first layer
-			for (int i = 0; i < nodes.size(); i++) {
-				int nodeId = nodes.get(i).id;
-				boolean isTarget = false;
-				for (int j = 0; j < adjacencyMatrix.size(); j++) {
-					List<Integer> row = adjacencyMatrix.get(j);
-					if (row.get(nodeId) == 1) {
-						isTarget = true;
-					}
-				}
-				if (!isTarget) {
-					newSources.add(nodeId);
-				}
+			List<Node> firstLayer =  layerList.get(0);
+			for (int i = 0; i < firstLayer.size(); i++) {
+				newSources.add(firstLayer.get(i).id);
 			}
 		}
 
