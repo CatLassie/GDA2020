@@ -10,6 +10,8 @@ public class Solution {
 	private ArrayList<Node> nodes;
 	private ArrayList<Edge> edges;
 	private List<List<Integer>> adjacencyMatrix;
+	// a list of nodes for each Y coordinate
+	private List<List<Node>> layerList;
 	private int cost;
 	private boolean isFeasible;
 
@@ -46,6 +48,38 @@ public class Solution {
 		}
 	}
 	
+	// assign Y coordinate to all nodes and add nodes to layerList
+	public void computeLayersForNodes() {
+		layerList = new ArrayList<List<Node>>();
+		for (int i = 0; i < height+1; i++) {
+			layerList.add(new ArrayList<Node>());
+		}
+		
+		for (int i = 0; i < nodes.size(); i++) {
+			Node node = nodes.get(i);
+			int y = yRecursion(node.id, 0);
+			node.y = y;
+			layerList.get(y).add(node);
+		}
+	}
+	
+	// recursivley compute the length of longest [source -> node] path
+	private int yRecursion(int nodeId, int currentDepth) {
+		int maxDepth = currentDepth;
+		
+		for (int i = 0; i < adjacencyMatrix.size(); i++) {
+			List<Integer> row = adjacencyMatrix.get(i);
+			if (row.get(nodeId) == 1) {
+				int newDepth = yRecursion(i, currentDepth + 1);
+				if(newDepth > maxDepth) {
+					maxDepth = newDepth;
+				}
+			}
+		}
+		
+		return maxDepth;
+	}
+	
 	
 	public void positionGraphOnGrid() {
 		ArrayList<Integer> nextLayerNodes = new ArrayList<Integer>();
@@ -69,7 +103,7 @@ public class Solution {
 					if (!node.assigned && node.dummy && node.pred.dummy) {
 						int diff = node.pred.x - node.pred.pred.x;
 						int x = node.pred.x + diff;
-						out.println(i+1 + " " + node.pred.x + " " + node.pred.pred.x);
+						// out.println(i+1 + " " + node.pred.x + " " + node.pred.pred.x);
 						if(occupiedX[x] || x > width || x < 0) {
 							out.println("Sorry, couldnt position dummy node " + node.id + " on straight line");
 							System.exit(-1);
@@ -269,6 +303,10 @@ public class Solution {
 
 	public List<List<Integer>> getAdjacencyMatrix() {
 		return adjacencyMatrix;
+	}
+	
+	public List<List<Node>> getLayerList() {
+		return layerList;
 	}
 
 	public int getCost() {
