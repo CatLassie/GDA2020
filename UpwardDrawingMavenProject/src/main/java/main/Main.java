@@ -12,7 +12,8 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		String fileName = "auto_2";
+		String fileName = "auto2";
+		boolean verbose = false;
 
 		String localDir = System.getProperty("user.dir").split("UpwardDrawingMavenProject")[0];
 		// String readPath = localDir + "\\instances\\vc-exact_"+instanceN+".gr";
@@ -30,7 +31,8 @@ public class Main {
 			System.exit(-1);
 		}
 		
-		Solution solution = new Solution(inst);
+		Solution solution = new Solution(inst, verbose);
+		solution.computeLayersForNodes();
 		solution.positionGraphOnGrid();
 		
 		// Write solution to file
