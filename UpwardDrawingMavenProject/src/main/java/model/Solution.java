@@ -173,16 +173,7 @@ public class Solution {
 	}
 
 	public GraphInstance getGraphInstanceFromSolution() {
-		// filter out dummy nodes
-		ArrayList<Node> originalNodes = new ArrayList<Node>();
-		for (int i = 0; i < nodes.size(); i++) {
-			Node node = nodes.get(i);
-			node.pred = null;
-			if (!node.dummy) {
-				originalNodes.add(node);
-			}
-		}
-		return new GraphInstance(width, height, originalNodes, edges);
+		return new GraphInstance(width, height, nodes, edges);
 	}
 
 	public int getWidth() {

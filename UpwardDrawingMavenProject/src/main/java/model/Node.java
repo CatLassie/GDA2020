@@ -8,10 +8,8 @@ public class Node {
 	public int x;
 	public int y;
 
-	public boolean assigned = false;
-	public boolean dummy = false;
-	public List<Node> pred = new ArrayList<Node>();
-	public Node succ = null;
+	public transient boolean assigned = false;
+	public transient List<Node> pred = new ArrayList<Node>();
 	
 	@Override
 	public String toString() {
