@@ -8,7 +8,6 @@ public class Node {
 	public int x;
 	public int y;
 
-	public transient boolean assigned = false;
 	public transient List<Node> pred = new ArrayList<Node>();
 	public transient List<Node> succ = new ArrayList<Node>();
 	

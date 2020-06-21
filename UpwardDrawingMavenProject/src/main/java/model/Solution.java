@@ -161,33 +161,30 @@ public class Solution {
 					// boolean equal = nextLayerNodes.get(j) == node.id;
 					// out.println("node idx: " + nextLayerNodes.get(j) + " == node id: " + node.id +" "+ equal );
 
-					if (!node.assigned) {
-						int x = 0;
-						searchX:
-						while (true) {
-							if (x > width) {
-								out.println("Sorry, couldnt find a position for node " + node.id);
-								System.exit(-1);
-							}
-
-							if (!positionOccupied[node.y][x]) {
-								boolean validPosition = true;
-								// check for each edge if it can be positioned with current x
-								for (int k = 0; k < node.pred.size(); k++) {
-									Node pred = node.pred.get(k);
-									validPosition = validPosition && isEdgeFeasible(pred.x, pred.y, x, node.y);
-								}
-
-								if (validPosition) {
-									node.x = x;
-									node.assigned = true;
-									positionOccupied[node.y][x] = true;
-									break searchX;
-								}
-							}
-
-							x++;
+					int x = 0;
+					searchX:
+					while (true) {
+						if (x > width) {
+							out.println("Sorry, couldnt find a position for node " + node.id);
+							System.exit(-1);
 						}
+
+						if (!positionOccupied[node.y][x]) {
+							boolean validPosition = true;
+							// check for each edge if it can be positioned with current x
+							for (int k = 0; k < node.pred.size(); k++) {
+								Node pred = node.pred.get(k);
+								validPosition = validPosition && isEdgeFeasible(pred.x, pred.y, x, node.y);
+							}
+
+							if (validPosition) {
+								node.x = x;
+								positionOccupied[node.y][x] = true;
+								break searchX;
+							}
+						}
+
+						x++;
 					}
 				}
 			}
