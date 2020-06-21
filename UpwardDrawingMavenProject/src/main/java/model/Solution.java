@@ -70,13 +70,19 @@ public class Solution {
 		
 		for (int i = 0; i < nodes.size(); i++) {
 			if(verbose) {
-				if((i+1) % 20 == 0) {
-					if((i+1) % 600 == 0) {
-						out.println(i+1);	
-					} else {
-						out.print((i+1) + ", ");
-					}					
-				}	
+				if(nodes.size() >= 20) {
+					if((i+1) % 20 == 0) {
+						if((i+1) % 600 == 0) {
+							out.println(i+1);	
+						} else {
+							out.print((i+1) + ", ");
+						}					
+					}		
+				} else {
+					if(i == nodes.size() -1) {
+						out.print((i+1));	
+					}
+				}
 			}
 			
 			Node node = nodes.get(i);
@@ -124,7 +130,7 @@ public class Solution {
 
 	public void positionGraphOnGrid() {
 		if(verbose) {
-			out.println("assigning X coordinate for nodes on layer:");
+			out.println("assigning X coordinate for nodes for all " + topLayer + " layers:");
 		}
 		
 		for (int i = 0; i <= topLayer; i++) {
