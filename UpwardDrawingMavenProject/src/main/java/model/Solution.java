@@ -55,6 +55,17 @@ public class Solution {
 			adjacencyMatrix.get(edge.source).set(edge.target, 1);
 		}
 		
+		// add pred to nodes
+		for (int i = 0; i < nodes.size(); i++) {
+			Node node = nodes.get(i);
+
+			for (int j = 0; j < nodes.size(); j++) {				
+				if(adjacencyMatrix.get(j).get(i) == 1) {
+					node.pred.add(nodes.get(j));
+				}
+			}
+		}
+		
 		// add succ to nodes
 		for (int i = 0; i < nodes.size(); i++) {
 			Node node = nodes.get(i);
@@ -115,14 +126,6 @@ public class Solution {
 		for (int i = 0; i < adjacencyMatrix.size(); i++) {
 			List<Integer> row = adjacencyMatrix.get(i);
 			if (row.get(nodeId) == 1) {
-
-				// add predecessor
-				Node node = nodes.get(nodeId);
-				Node pred = nodes.get(i);
-				if (!node.pred.contains(pred)) {
-					node.pred.add(pred);
-				}
-
 				int newDepth = yRecursion(i, currentDepth + 1);
 				if (newDepth > maxDepth) {
 					maxDepth = newDepth;
