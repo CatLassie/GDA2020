@@ -19,7 +19,7 @@ public class Solution {
 	public Solution(GraphInstance inst) {
 		width = inst.getWidth();
 		height = inst.getHeight();
-		
+
 		// Set Nodes
 		nodes = new ArrayList<Node>();
 		for (int i = 0; i < inst.getNodes().size(); i++) {
@@ -30,15 +30,15 @@ public class Solution {
 			newNode.y = 0;
 			nodes.add(newNode);
 		}
-		
+
 		// Set Edges
 		edges = inst.getEdges();
-		
+
 		// Calculate Adjacency Matrix
 		adjacencyMatrix = new ArrayList<List<Integer>>();
-		for(int i = 0; i < nodes.size(); i++) {
+		for (int i = 0; i < nodes.size(); i++) {
 			List<Integer> row = new ArrayList<Integer>();
-			for(int j = 0; j < nodes.size(); j++) {
+			for (int j = 0; j < nodes.size(); j++) {
 				row.add(0);
 			}
 			adjacencyMatrix.add(row);
@@ -47,17 +47,17 @@ public class Solution {
 			Edge edge = inst.getEdges().get(i);
 			adjacencyMatrix.get(edge.source).set(edge.target, 1);
 		}
-		
-		positionOccupied = new boolean[height+1][width+1];
+
+		positionOccupied = new boolean[height + 1][width + 1];
 	}
-	
+
 	// assign Y coordinate to all nodes and add nodes to layerList
 	public void computeLayersForNodes() {
 		layerList = new ArrayList<List<Node>>();
-		for (int i = 0; i < height+1; i++) {
+		for (int i = 0; i < height + 1; i++) {
 			layerList.add(new ArrayList<Node>());
 		}
-		
+
 		for (int i = 0; i < nodes.size(); i++) {
 			Node node = nodes.get(i);
 			int y = yRecursion(node.id, 0);
@@ -65,65 +65,64 @@ public class Solution {
 			layerList.get(y).add(node);
 		}
 	}
-	
+
 	// recursivley compute the length of longest [source -> node] path
 	private int yRecursion(int nodeId, int currentDepth) {
 		int maxDepth = currentDepth;
-		
+
 		for (int i = 0; i < adjacencyMatrix.size(); i++) {
 			List<Integer> row = adjacencyMatrix.get(i);
 			if (row.get(nodeId) == 1) {
-				
+
 				// add predecessor
 				Node node = nodes.get(nodeId);
 				Node pred = nodes.get(i);
-				if(!node.pred.contains(pred)) {
-					node.pred.add(pred);	
+				if (!node.pred.contains(pred)) {
+					node.pred.add(pred);
 				}
-				
+
 				int newDepth = yRecursion(i, currentDepth + 1);
-				if(newDepth > maxDepth) {
+				if (newDepth > maxDepth) {
 					maxDepth = newDepth;
 				}
 			}
 		}
-		
+
 		return maxDepth;
 	}
-	
-	
+
 	public void positionGraphOnGrid() {
 		for (int i = 0; i <= height; i++) {
 			List<Node> nextLayerNodes = layerList.get(i);
-			
+
 			for (int j = 0; j <= width; j++) {
 				if (j < nextLayerNodes.size()) {
-					Node node = nodes.get(nextLayerNodes.get(j).id); //TODO: more like find by id but ok for now
-					
+					Node node = nodes.get(nextLayerNodes.get(j).id); // TODO: more like find by id but ok for now
+
 					// OBSOLETE COMMENT!
-                    // DEBUG
-                    // if not equal, the alg. will break!!!
-                    // boolean equal = nextLayerNodes.get(j) == node.id;
-                    // out.println("node idx: " + nextLayerNodes.get(j) + " == node id: " + node.id +" "+ equal );
-					
+					// DEBUG
+					// if not equal, the alg. will break!!!
+					// boolean equal = nextLayerNodes.get(j) == node.id;
+					// out.println("node idx: " + nextLayerNodes.get(j) + " == node id: " + node.id +" "+ equal );
+
 					if (!node.assigned) {
 						int x = 0;
 						searchX:
-						while(true) {
-							if(x > width) {
+						while (true) {
+							if (x > width) {
 								out.println("Sorry, couldnt find a position for node " + node.id);
 								System.exit(-1);
 							}
-							
-							if(!positionOccupied[node.y][x]) {
+
+							if (!positionOccupied[node.y][x]) {
 								boolean validPosition = true;
 								// check for each edge if it can be positioned with current x
-								for(int k = 0; k < node.pred.size(); k++) {
+								for (int k = 0; k < node.pred.size(); k++) {
 									Node pred = node.pred.get(k);
 									validPosition = validPosition && isEdgeFeasible(pred.x, pred.y, x, node.y);
 								}
-								
-								if(validPosition) {
+
+								if (validPosition) {
 									node.x = x;
 									node.assigned = true;
 									positionOccupied[node.y][x] = true;
@@ -131,7 +130,7 @@ public class Solution {
 								}
 							}
 
-							x++;	
+							x++;
 						}
 					}
 				}
@@ -139,32 +138,32 @@ public class Solution {
 
 		}
 	}
-	
+
 	// compute all points where edge crosses grid and check if they are occupied
 	private boolean isEdgeFeasible(int x1, int y1, int x2, int y2) {
 		boolean isFeasible = true;
 		double invSlope;
 
-		if(x1 == x2) {
+		if (x1 == x2) {
 			invSlope = 0;
 		} else {
-			double slope = (double)(y2 - y1) / (double)(x2 - x1);
+			double slope = (double) (y2 - y1) / (double) (x2 - x1);
 			invSlope = 1 / slope;
 		}
-		
-		for(int yi = y1 + 1; yi < y2; yi++) {
+
+		for (int yi = y1 + 1; yi < y2; yi++) {
 			double xi = x1 + ((yi - y1) * invSlope);
 			// round to 4 decimal places
-			xi = Math.round(xi*10000.0) / 10000.0;
-			if(xi % 1 == 0) {
+			xi = Math.round(xi * 10000.0) / 10000.0;
+			if (xi % 1 == 0) {
 				int xi_int = (int) xi;
 				isFeasible = isFeasible && !positionOccupied[yi][xi_int];
 			}
 		}
-		
+
 		return isFeasible;
 	}
-	
+
 	private void calculateFeasibility() {
 		out.println("calculateFeasibility()");
 	}
@@ -172,15 +171,16 @@ public class Solution {
 	private void calculateCost() {
 		out.println("calculateCost()");
 	}
-	
+
 	public GraphInstance getGraphInstanceFromSolution() {
 		// filter out dummy nodes
 		ArrayList<Node> originalNodes = new ArrayList<Node>();
-		for(int i = 0; i < nodes.size(); i++) {
+		for (int i = 0; i < nodes.size(); i++) {
 			Node node = nodes.get(i);
-			if(!node.dummy) {
+			node.pred = null;
+			if (!node.dummy) {
 				originalNodes.add(node);
-			} 
+			}
 		}
 		return new GraphInstance(width, height, originalNodes, edges);
 	}
@@ -200,7 +200,7 @@ public class Solution {
 	public List<List<Integer>> getAdjacencyMatrix() {
 		return adjacencyMatrix;
 	}
-	
+
 	public List<List<Node>> getLayerList() {
 		return layerList;
 	}
@@ -231,6 +231,6 @@ public class Solution {
 		}
 		matrixPrint += "\n\t\t]";
 
-		return "Solution:" + feasiblePrint + costPrint + nodesPrint + nodeNumberPrint + edgesPrint  + matrixPrint;
+		return "Solution:" + feasiblePrint + costPrint + nodesPrint + nodeNumberPrint + edgesPrint + matrixPrint;
 	}
 }
