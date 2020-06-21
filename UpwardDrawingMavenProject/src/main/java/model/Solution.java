@@ -238,7 +238,7 @@ public class Solution {
 	// calculate total edge crossings from scratch
 	private void calculateCost() {
 		if(verbose) {
-			out.println("calculating initial cost...\n");
+			out.println("calculating initial cost...");
 		}
 		
 		for(int i = 0; i < edges.size() - 1; i++) {
@@ -247,6 +247,10 @@ public class Solution {
 					cost = cost + 1;
 				}
 			}
+		}
+		
+		if(verbose) {
+			out.println("initial cost is: "+ cost +"\n");
 		}
 	}
 	
