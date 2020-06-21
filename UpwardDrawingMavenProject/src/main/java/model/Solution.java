@@ -1,6 +1,8 @@
 package model;
 
 import static java.lang.System.out;
+
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,6 +84,7 @@ public class Solution {
 	public void computeInitialFeasibleSolution() {
 		computeLayersForNodes();
 		positionGraphOnGrid();
+		calculateCost();
 	}
 
 	// assign Y coordinate to all nodes and add nodes to layerList
@@ -231,9 +234,35 @@ public class Solution {
 	public Solution copy(Solution solution) {
 		return null;
 	}
-
+	
+	// calculate total edge crossings from scratch
 	private void calculateCost() {
-		out.println("calculateCost()");
+		if(verbose) {
+			out.println("calculating initial cost...\n");
+		}
+		
+		for(int i = 0; i < edges.size() - 1; i++) {
+			for(int j = i + 1; j < edges.size(); j++) {
+				if(doEdgesIntersect(edges.get(i), edges.get(j))) {
+					cost = cost + 1;
+				}
+			}
+		}
+	}
+	
+	private boolean doEdgesIntersect(Edge edge1, Edge edge2) {
+		Node source1 = nodes.get(edge1.source);
+		Node target1 = nodes.get(edge1.target);
+		Node source2 = nodes.get(edge2.source);
+		Node target2 = nodes.get(edge2.target);
+		boolean shareSource = source1.x == source2.x && source1.y == source2.y;
+		boolean shareTarget = target1.x == target2.x && target1.y == target2.y;
+		boolean sequential1 = target1.x == source2.x && target1.y == source2.y;
+		boolean sequential2 = source1.x == target2.x && source1.y == target2.y;
+		if(shareSource || shareTarget || sequential1 || sequential2) {
+			return false;
+		}
+		return Line2D.linesIntersect(source1.x,source1.y, target1.x,target1.y, source2.x,source2.y, target2.x,target2.y);
 	}
 
 	public GraphInstance getGraphInstanceFromSolution() {
