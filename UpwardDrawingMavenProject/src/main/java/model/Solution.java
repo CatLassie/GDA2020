@@ -12,11 +12,18 @@ public class Solution {
 	private List<List<Integer>> adjacencyMatrix;
 	// a list of nodes for each Y coordinate
 	private List<List<Node>> layerList;
+	private int topLayer = 0;
 	private boolean[][] positionOccupied;
 	private int cost;
 	private boolean isFeasible;
+	private boolean verbose;
 
-	public Solution(GraphInstance inst) {
+	public Solution(GraphInstance inst, boolean verbose) {
+		this.verbose = verbose;
+		if(verbose) {
+			out.println("initializing solution instance...");
+		}
+		
 		width = inst.getWidth();
 		height = inst.getHeight();
 
@@ -47,23 +54,33 @@ public class Solution {
 			Edge edge = inst.getEdges().get(i);
 			adjacencyMatrix.get(edge.source).set(edge.target, 1);
 		}
-
-		positionOccupied = new boolean[height + 1][width + 1];
 	}
 
 	// assign Y coordinate to all nodes and add nodes to layerList
+	// initialize positionOccupied matrix
 	public void computeLayersForNodes() {
+		if(verbose) {
+			out.println("computing layers (Y coordinate) for all nodes...");
+		}
+		
 		layerList = new ArrayList<List<Node>>();
 		for (int i = 0; i < height + 1; i++) {
 			layerList.add(new ArrayList<Node>());
 		}
-
+		
 		for (int i = 0; i < nodes.size(); i++) {
 			Node node = nodes.get(i);
 			int y = yRecursion(node.id, 0);
 			node.y = y;
 			layerList.get(y).add(node);
+			
+			// find last layer
+			if(y > topLayer) {
+				topLayer = y;
+			}
 		}
+
+		positionOccupied = new boolean[topLayer + 1][width + 1];
 	}
 
 	// recursivley compute the length of longest [source -> node] path
@@ -92,7 +109,19 @@ public class Solution {
 	}
 
 	public void positionGraphOnGrid() {
-		for (int i = 0; i <= height; i++) {
+		if(verbose) {
+			out.println("assigning X coordinate for nodes on layer:");
+		}
+		
+		for (int i = 0; i <= topLayer; i++) {
+			if(verbose) {
+				if((i+1) % 30 == 0 || i == topLayer) {
+					out.println(i);	
+				} else {
+					out.print(i + ", ");
+				}
+			}
+			
 			List<Node> nextLayerNodes = layerList.get(i);
 
 			for (int j = 0; j <= width; j++) {
