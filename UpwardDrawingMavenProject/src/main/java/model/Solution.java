@@ -17,7 +17,6 @@ public class Solution {
 	private int topLayer = 0;
 	private boolean[][] positionOccupied;
 	private int cost;
-	private boolean isFeasible;
 	private boolean verbose;
 
 	public Solution(GraphInstance inst, boolean verbose) {
@@ -294,13 +293,8 @@ public class Solution {
 		return cost;
 	}
 
-	public boolean isFeasible() {
-		return isFeasible;
-	}
-
 	@Override
 	public String toString() {
-		String feasiblePrint = "\n\tfeasible: " + isFeasible;
 		String costPrint = "\n\tcost: " + cost;
 		String nodeNumberPrint = "\n\tnode number: " + nodes.size();
 		String nodesPrint = "\n\tnodes: " + nodes;
@@ -316,7 +310,7 @@ public class Solution {
 		}
 		matrixPrint += "\n\t\t]";
 
-		return "Solution:" + feasiblePrint + costPrint + nodesPrint + nodeNumberPrint + edgesPrint + matrixPrint;
+		return "Solution:" + costPrint + nodesPrint + nodeNumberPrint + edgesPrint + matrixPrint;
 	}
 	
 	public void verboseInitY(int i) {
