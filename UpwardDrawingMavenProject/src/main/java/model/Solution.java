@@ -18,7 +18,40 @@ public class Solution {
 	private boolean[][] positionOccupied;
 	private int cost;
 	private boolean verbose;
-
+	
+	// Copy Constructor
+	// deep copy (kind of) of solution (for keeping track of best solution)
+	public Solution(Solution s) {
+		width = s.width;
+		height = s.height;
+		cost = s.cost;
+		topLayer = s.topLayer;
+		verbose = s.verbose;
+		edges = s.edges;
+		adjacencyMatrix = s.adjacencyMatrix;
+		
+		nodes = new ArrayList<Node>();
+		for(int i = 0; i < s.nodes.size(); i++) {
+			nodes.add(s.nodes.get(i).copy());
+		}
+				
+		layerList = new ArrayList<List<Node>>();
+		for (int i = 0; i < topLayer + 1; i++) {
+			List<Node> layer = new ArrayList<Node>();
+			for(int j = 0; j < s.layerList.get(i).size(); j++) {
+				layer.add(s.layerList.get(i).get(j).copy());
+			}
+			layerList.add(layer);
+		}
+		
+		positionOccupied = new boolean[topLayer + 1][width + 1];
+		for(int i = 0; i < topLayer + 1; i++) {
+			for(int j = 0; j < width + 1; j++) {
+				positionOccupied[i][j] = s.positionOccupied[i][j];
+			}
+		}	
+	}
+	
 	public Solution(GraphInstance inst, boolean verbose) {
 		this.verbose = verbose;
 		if(verbose) {
@@ -62,7 +95,7 @@ public class Solution {
 
 			for (int j = 0; j < nodes.size(); j++) {				
 				if(adjacencyMatrix.get(j).get(i) == 1) {
-					node.pred.add(nodes.get(j));
+					node.pred.add(nodes.get(j).id);
 				}
 			}
 		}
@@ -74,7 +107,7 @@ public class Solution {
 			
 			for (int j = 0; j < row.size(); j++) {
 				if(row.get(j) == 1) {
-					node.succ.add(nodes.get(j));
+					node.succ.add(nodes.get(j).id);
 				}
 			}
 		}
@@ -172,7 +205,7 @@ public class Solution {
 							boolean validPosition = true;
 							// check for each edge if it can be positioned with current x
 							for (int k = 0; k < node.pred.size(); k++) {
-								Node pred = node.pred.get(k);
+								Node pred = nodes.get(node.pred.get(k));
 								validPosition = validPosition && isEdgeFeasible(pred.x, pred.y, x, node.y);
 							}
 
@@ -224,13 +257,7 @@ public class Solution {
 	public boolean isMoveFeasible(Node node, int newX) { 
 		return false;
 	}
-	
-	// TODO
-	// deep copy (kind of) of solution (for keeping track of best solution)
-	public Solution copy(Solution solution) {
-		return null;
-	}
-	
+		
 	// calculate total edge crossings from scratch
 	private void calculateCost() {
 		if(verbose) {
