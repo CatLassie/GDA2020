@@ -55,6 +55,11 @@ public class Solution {
 			adjacencyMatrix.get(edge.source).set(edge.target, 1);
 		}
 	}
+	
+	public void computeInitialFeasibleSolution() {
+		computeLayersForNodes();
+		positionGraphOnGrid();
+	}
 
 	// assign Y coordinate to all nodes and add nodes to layerList
 	// initialize positionOccupied matrix

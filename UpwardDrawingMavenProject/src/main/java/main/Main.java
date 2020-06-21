@@ -32,8 +32,7 @@ public class Main {
 		}
 		
 		Solution solution = new Solution(inst, verbose);
-		solution.computeLayersForNodes();
-		solution.positionGraphOnGrid();
+		solution.computeInitialFeasibleSolution();
 		
 		// Write solution to file
 		try {
