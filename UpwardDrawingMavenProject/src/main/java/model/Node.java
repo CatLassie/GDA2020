@@ -10,6 +10,7 @@ public class Node {
 
 	public transient boolean assigned = false;
 	public transient List<Node> pred = new ArrayList<Node>();
+	public transient List<Node> succ = new ArrayList<Node>();
 	
 	@Override
 	public String toString() {

@@ -54,6 +54,18 @@ public class Solution {
 			Edge edge = inst.getEdges().get(i);
 			adjacencyMatrix.get(edge.source).set(edge.target, 1);
 		}
+		
+		// add succ to nodes
+		for (int i = 0; i < nodes.size(); i++) {
+			Node node = nodes.get(i);
+			List<Integer> row = adjacencyMatrix.get(i);
+			
+			for (int j = 0; j < row.size(); j++) {
+				if(row.get(j) == 1) {
+					node.succ.add(nodes.get(j));
+				}
+			}
+		}
 	}
 	
 	public void computeInitialFeasibleSolution() {
@@ -204,9 +216,17 @@ public class Solution {
 
 		return isFeasible;
 	}
-
-	private void calculateFeasibility() {
-		out.println("calculateFeasibility()");
+	
+	// TODO
+	// check if node can be put on new X coordinate
+	public boolean isMoveFeasible(Node node, int newX) { 
+		return false;
+	}
+	
+	// TODO
+	// deep copy (kind of) of solution (for keeping track of best solution)
+	public Solution copy(Solution solution) {
+		return null;
 	}
 
 	private void calculateCost() {
