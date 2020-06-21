@@ -70,19 +70,7 @@ public class Solution {
 		
 		for (int i = 0; i < nodes.size(); i++) {
 			if(verbose) {
-				if(nodes.size() >= 20) {
-					if((i+1) % 20 == 0) {
-						if((i+1) % 600 == 0) {
-							out.println(i+1);	
-						} else {
-							out.print((i+1) + ", ");
-						}					
-					}		
-				} else {
-					if(i == nodes.size() -1) {
-						out.print((i+1));	
-					}
-				}
+				verboseInitY(i);
 			}
 			
 			Node node = nodes.get(i);
@@ -135,11 +123,7 @@ public class Solution {
 		
 		for (int i = 0; i <= topLayer; i++) {
 			if(verbose) {
-				if((i+1) % 30 == 0 || i == topLayer) {
-					out.println(i);	
-				} else {
-					out.print(i + ", ");
-				}
+				verboseInitX(i);
 			}
 			
 			List<Node> nextLayerNodes = layerList.get(i);
@@ -275,5 +259,29 @@ public class Solution {
 		matrixPrint += "\n\t\t]";
 
 		return "Solution:" + feasiblePrint + costPrint + nodesPrint + nodeNumberPrint + edgesPrint + matrixPrint;
+	}
+	
+	public void verboseInitY(int i) {
+		if(nodes.size() >= 20) {
+			if((i+1) % 20 == 0) {
+				if((i+1) % 600 == 0) {
+					out.println(i+1);	
+				} else {
+					out.print((i+1) + ", ");
+				}					
+			}		
+		} else {
+			if(i == nodes.size() -1) {
+				out.print((i+1));	
+			}
+		}
+	}
+	
+	public void verboseInitX(int i) {
+		if((i+1) % 30 == 0 || i == topLayer) {
+			out.println(i);	
+		} else {
+			out.print(i + ", ");
+		}
 	}
 }

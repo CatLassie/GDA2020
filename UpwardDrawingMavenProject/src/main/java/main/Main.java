@@ -13,7 +13,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		String fileName = "auto2";
-		boolean verbose = true;
+		boolean verbose = false;
 
 		String localDir = System.getProperty("user.dir").split("UpwardDrawingMavenProject")[0];
 		// String readPath = localDir + "\\instances\\vc-exact_"+instanceN+".gr";
