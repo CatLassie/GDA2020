@@ -21,7 +21,7 @@ public class Solution {
 	public Solution(GraphInstance inst, boolean verbose) {
 		this.verbose = verbose;
 		if(verbose) {
-			out.println("initializing solution instance...");
+			out.println("initializing solution instance...\n");
 		}
 		
 		width = inst.getWidth();
@@ -60,7 +60,7 @@ public class Solution {
 	// initialize positionOccupied matrix
 	public void computeLayersForNodes() {
 		if(verbose) {
-			out.println("computing layers (Y coordinate) for all nodes...");
+			out.println("computing layers (Y coordinate) for all " + nodes.size() + " nodes:");
 		}
 		
 		layerList = new ArrayList<List<Node>>();
@@ -69,6 +69,16 @@ public class Solution {
 		}
 		
 		for (int i = 0; i < nodes.size(); i++) {
+			if(verbose) {
+				if((i+1) % 20 == 0) {
+					if((i+1) % 600 == 0) {
+						out.println(i+1);	
+					} else {
+						out.print((i+1) + ", ");
+					}					
+				}	
+			}
+			
 			Node node = nodes.get(i);
 			int y = yRecursion(node.id, 0);
 			node.y = y;
@@ -78,6 +88,10 @@ public class Solution {
 			if(y > topLayer) {
 				topLayer = y;
 			}
+		}
+		
+		if(verbose) {
+			out.println("\n");
 		}
 
 		positionOccupied = new boolean[topLayer + 1][width + 1];
@@ -165,6 +179,9 @@ public class Solution {
 				}
 			}
 
+		}
+		if(verbose) {
+			out.println("");
 		}
 	}
 
