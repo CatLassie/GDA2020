@@ -12,6 +12,7 @@ public class Solution {
 	private List<List<Integer>> adjacencyMatrix;
 	// a list of nodes for each Y coordinate
 	private List<List<Node>> layerList;
+	private boolean[][] positionOccupied;
 	private int cost;
 	private boolean isFeasible;
 
@@ -46,6 +47,8 @@ public class Solution {
 			Edge edge = inst.getEdges().get(i);
 			adjacencyMatrix.get(edge.source).set(edge.target, 1);
 		}
+		
+		positionOccupied = new boolean[height+1][width+1];
 	}
 	
 	// assign Y coordinate to all nodes and add nodes to layerList
