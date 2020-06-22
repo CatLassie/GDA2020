@@ -20,9 +20,9 @@ public class Main {
 		int equilibriumCoefficient = 0;
 		
 		String localDir = System.getProperty("user.dir").split("UpwardDrawingMavenProject")[0];
-		String readPath = localDir + "instances\\" + fileName + ".json";
-		String writePath = localDir + "solutions\\" + fileName + "_solution.json";
-		String writePathOpt = localDir + "solutions\\" + fileName + "_solution_opt.json";
+		String readPath = localDir + "\\instances\\" + fileName + ".json";
+		String writePath = localDir + "\\solutions\\" + fileName + "_solution.json";
+		String writePathOpt = localDir + "\\solutions\\" + fileName + "_solution_opt.json";
 		
 		GraphInstance inst = null;
 
