@@ -117,6 +117,9 @@ public class Solution {
 		computeLayersForNodes();
 		positionGraphOnGrid();
 		calculateCost();
+		if(verbose) {
+			out.println("initial cost is: "+ cost +"\n");
+		}
 	}
 
 	// assign Y coordinate to all nodes and add nodes to layerList
@@ -355,11 +358,8 @@ public class Solution {
 	}
 		
 	// calculate total edge crossings from scratch
-	private void calculateCost() {
-		if(verbose) {
-			out.println("calculating initial cost...");
-		}
-		
+	public void calculateCost() {
+		cost = 0;
 		for(int i = 0; i < edges.size() - 1; i++) {
 			for(int j = i + 1; j < edges.size(); j++) {
 				Edge edge1 = edges.get(i);
@@ -372,10 +372,6 @@ public class Solution {
 					cost = cost + 1;
 				}
 			}
-		}
-		
-		if(verbose) {
-			out.println("initial cost is: "+ cost +"\n");
 		}
 	}
 	
