@@ -122,7 +122,7 @@ public class Solution {
 
 	// assign Y coordinate to all nodes and add nodes to layerList
 	// initialize positionOccupied matrix
-	public void computeLayersForNodes() {
+	private void computeLayersForNodes() {
 		if(verbose) {
 			out.println("computing layers (Y coordinate) for all " + nodes.size() + " nodes:");
 		}
@@ -172,7 +172,7 @@ public class Solution {
 		return maxDepth;
 	}
 
-	public void positionGraphOnGrid() {
+	private void positionGraphOnGrid() {
 		if(verbose) {
 			out.println("assigning X coordinate for nodes for all " + topLayer + " layers:");
 		}
@@ -261,7 +261,7 @@ public class Solution {
 		return isFeasible;
 	}
 	
-	// compute all points where edge crosses grid and occupied value
+	// compute all points where edge crosses grid and occupy value
 	private void updateEdgeOccupyValue(int x1, int y1, int x2, int y2, int newValue) {
 		double invSlope;
 
@@ -278,7 +278,7 @@ public class Solution {
 			xi = Math.round(xi * 1000000.0) / 1000000.0;
 			if (xi % 1 == 0) {
 				int xi_int = (int) xi;
-				if(positionOccupied[yi][xi_int] != 2) {
+				if(positionOccupied[yi][xi_int] != 2) { // check helps with the rounding error
 					positionOccupied[yi][xi_int] = newValue;	
 				}
 			}
@@ -304,79 +304,6 @@ public class Solution {
 		}
 		
 		return isFeasible;
-	}
-	
-	// calculate how move will change solution cost with incremental evaluation
-	// edges only taken whose coordinates are in a small rectangle 
-	public int computeMoveCost(Node node, int newX) {
-		int minX = Math.min(node.x, newX);
-		int maxX = Math.max(node.x, newX);
-		
-		int minY = node.y;
-		for(int i = 0; i < node.pred.size(); i++) {
-			int predY = nodes.get(node.pred.get(i)).y;
-			if(predY < minY) {
-				minY = predY;
-			}
-		}
-		
-		int maxY = node.y;
-		for(int i = 0; i < node.succ.size(); i++) {
-			int succY = nodes.get(node.succ.get(i)).y;
-			if(succY > maxY) {
-				maxY = succY;
-			}
-		}
-		
-		// completely above/under/leftOf/rightOf
-		ArrayList<Edge> relevantEdges = new ArrayList<Edge>();
-		for(int i = 0; i < edges.size(); i++) {
-			Edge edge = edges.get(i);
-			Node source = nodes.get(edge.source);
-			Node target = nodes.get(edge.target);
-			boolean above = source.y >= maxY && target.y >= maxY;
-			boolean under = source.y <= minY && target.y <= minY;
-			boolean leftOf = source.x <= minX && target.x <= minX;
-			boolean rightOf = source.x >= maxX && target.x >= maxX;
-			if(!(above || under || leftOf || rightOf)) {
-				relevantEdges.add(edge);
-			}
-		}
-		
-		int currentCost = 0;
-		for(int i = 0; i < relevantEdges.size() - 1; i++) {
-			for(int j = i + 1; j < relevantEdges.size(); j++) {
-				Edge edge1 = relevantEdges.get(i);
-				Edge edge2 = relevantEdges.get(j);
-				Node source1 = nodes.get(edge1.source);
-				Node target1 = nodes.get(edge1.target);
-				Node source2 = nodes.get(edge2.source);
-				Node target2 = nodes.get(edge2.target);
-				if(doEdgesIntersect(source1.x,source1.y, target1.x,target1.y, source2.x,source2.y, target2.x,target2.y)) {
-					currentCost = currentCost + 1;
-				}
-			}
-		}
-		
-		int nextCost = 0;
-		for(int i = 0; i < relevantEdges.size() - 1; i++) {
-			for(int j = i + 1; j < relevantEdges.size(); j++) {
-				Edge edge1 = relevantEdges.get(i);
-				Edge edge2 = relevantEdges.get(j);
-				Node source1 = nodes.get(edge1.source);
-				Node target1 = nodes.get(edge1.target);
-				Node source2 = nodes.get(edge2.source);
-				Node target2 = nodes.get(edge2.target);
-				if(doEdgesIntersect(source1.id == node.id ? newX : source1.x, source1.y,
-									target1.id == node.id ? newX : target1.x, target1.y,
-									source2.id == node.id ? newX : source2.x, source2.y,
-									target2.id == node.id ? newX : target2.x, target2.y)) {
-					nextCost = nextCost + 1;
-				}
-			}
-		}
-		
-		return nextCost - currentCost;
 	}
 	
 	// re-assign X coord of node, update positionOccupied and cost
@@ -482,7 +409,7 @@ public class Solution {
 		return "Solution:" + costPrint + nodesPrint + nodeNumberPrint + edgesPrint + matrixPrint;
 	}
 	
-	public void verboseInitY(int i) {
+	private void verboseInitY(int i) {
 		if(nodes.size() >= 20) {
 			if((i+1) % 20 == 0) {
 				if((i+1) % 600 == 0) {
@@ -498,7 +425,7 @@ public class Solution {
 		}
 	}
 	
-	public void verboseInitX(int i) {
+	private void verboseInitX(int i) {
 		if((i+1) % 30 == 0 || i == topLayer) {
 			out.println(i);	
 		} else {

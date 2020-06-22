@@ -49,6 +49,7 @@ public class SimulatedAnnealing {
 	private void oneTemperatureLevelSearch() {
 		equilibriumCycle:
 		for(int i = 0; i < equilibriumCondition && !Utilities.isTimeOver(timeLimit); i++) {
+			
 			if(verbose) {
 				if(Utilities.elapsedTime() > timeCounter * 5) {
 					if((timeCounter+1) % 15 == 0) {
@@ -59,6 +60,7 @@ public class SimulatedAnnealing {
 					timeCounter++;
 				}
 			}
+			
 			// System.out.println(i);
 			int randomNodeId = ThreadLocalRandom.current().nextInt(0, currentSolution.getNodes().size());
 			Node randomNode = currentSolution.getNodes().get(randomNodeId);
@@ -67,33 +69,6 @@ public class SimulatedAnnealing {
 			if(!currentSolution.isMoveFeasible(randomNode, randomX)) {
 				continue equilibriumCycle;
 			}
-			
-			/*
-			int costChange = currentSolution.computeMoveCost(randomNode, randomX);
-			int newCost = currentSolution.getCost() + costChange;
-						
-			if(newCost < currentSolution.getCost()) {
-				currentSolution.performMove(randomNode, randomX, costChange);
-			} else {
-				double e = java.lang.Math.E;
-				double costDifference = Math.abs(costChange);
-				double metrolopisCriterion = Math.pow(e, -(costDifference / temperature));
-				double probability = (double)ThreadLocalRandom.current().nextInt(0, 1000)/1000;
-				
-				//if(i == 0) {
-				//	System.out.println(metrolopisCriterion);
-				//}
-				
-				if(probability < metrolopisCriterion) {
-					currentSolution.performMove(randomNode, randomX, costChange);
-				}
-			}
-			*/
-			
-			 
-			
-			
-
 			
 			Solution nextSolution = new Solution(currentSolution);
 			randomNode = nextSolution.getNodes().get(randomNodeId);
@@ -118,14 +93,7 @@ public class SimulatedAnnealing {
 				}
 			}
 			
-			
-			
-			
-			
-			
-			
 		}
-		
 	}
 	
 	public String toString() {

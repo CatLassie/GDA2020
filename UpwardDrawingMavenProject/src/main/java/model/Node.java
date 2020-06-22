@@ -37,17 +37,4 @@ public class Node {
 	public String toString() {
 		return "{id=" + id + ", x=" + x + ", y=" + y + "}";
 	}
-	
-	/*
-	@Override
-	public String toString() {
-		List<Integer> predId = new ArrayList<Integer>();
-		if(pred != null) {
-			for(int i = 0; i < pred.size(); i++) {
-				predId.add(pred.get(i).id);
-			}			
-		}
-		return "{id=" + id + ", x=" + x + ", y=" + y + ", preds=" + predId + "}";
-	}
-	*/
 }
