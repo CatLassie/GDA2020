@@ -15,21 +15,23 @@ public class SimulatedAnnealing {
 	private double coolingRate; // temperature cooling rate (e.g. 0.95)
 	private int equilibriumCondition; // number of moves before temperature adjustment (multiple of vertex number, e.g. n*(sqrt(n)))
 	private double stoppingCondition; // minimum temperature (e.g. 0.01)
+	private int timeLimit;
 	private int timeCounter = 0;
 	
-	public SimulatedAnnealing (Solution solution, double coolingRate, int equilibriumCoefficient, double stoppingCondition) {
+	public SimulatedAnnealing (Solution solution, double coolingRate, int equilibriumCoefficient, double stoppingCondition, int timeLimit) {
 		this.bestSolution = new Solution(solution);
 		this.currentSolution = solution;
 		this.temperature = solution.getNodes().size();
 		this.coolingRate = coolingRate;
 		this.equilibriumCondition = equilibriumCoefficient * solution.getNodes().size();
 		this.stoppingCondition = stoppingCondition;
+		this.timeLimit = timeLimit;
 	}
 	
 	public Solution search() {
 		out.print("\ntime elapsed (sec): ");
 		Utilities.startTimer();
-		while((temperature > stoppingCondition) && !Utilities.isTimeOver()) {
+		while((temperature > stoppingCondition) && !Utilities.isTimeOver(timeLimit)) {
 			oneTemperatureLevelSearch();
 			// System.out.println(temperature);
 			temperature = temperature * coolingRate;	
@@ -40,9 +42,13 @@ public class SimulatedAnnealing {
 	
 	private void oneTemperatureLevelSearch() {
 		equilibriumCycle:
-		for(int i = 0; i < equilibriumCondition && !Utilities.isTimeOver(); i++) {
+		for(int i = 0; i < equilibriumCondition && !Utilities.isTimeOver(timeLimit); i++) {
 			if(Utilities.elapsedTime() > timeCounter * 5) {
-				out.print(Utilities.elapsedTime() +", ");
+				if((timeCounter+1) % 15 == 0) {
+					out.println(Math.round(Utilities.elapsedTime()) +", ");	
+				} else {
+					out.print(Math.round(Utilities.elapsedTime()) +", ");	
+				}
 				timeCounter++;
 			}
 			// System.out.println(i);

@@ -29,6 +29,7 @@ public class Main {
 
 		String fileName = "auto2";
 		boolean verbose = true;
+		int timeLimit = 180;
 
 		String localDir = System.getProperty("user.dir").split("UpwardDrawingMavenProject")[0];
 		// String readPath = localDir + "\\instances\\vc-exact_"+instanceN+".gr";
@@ -56,7 +57,7 @@ public class Main {
 		initialSolution.computeInitialFeasibleSolution();
 		
 		SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(new Solution(initialSolution),
-				   coolingRate, equilibriumCoefficient, stoppingCondition);
+				   coolingRate, equilibriumCoefficient, stoppingCondition, timeLimit);
 
 		System.out.println("SIMULATED ANNEALING:");
 		System.out.println(simulatedAnnealing+"");

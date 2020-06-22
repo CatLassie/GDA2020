@@ -8,10 +8,10 @@ public class Utilities {
 	}
 	
 	// timeout set to 1 minute
-	public static boolean isTimeOver () {
+	public static boolean isTimeOver (int timeLimit) {
 		long currentTime = System.currentTimeMillis();
 		double diffSec = ((double) currentTime - timer)/1000;
-		return diffSec > 60;
+		return diffSec > timeLimit;
 	}
 	
 	public static double elapsedTime() {
