@@ -32,12 +32,13 @@ public class SimulatedAnnealing {
 			// System.out.println(temperature);
 			temperature = temperature * coolingRate;	
 		}
-		return currentSolution;
+		return bestSolution;
 	}
 	
 	private void oneTemperatureLevelSearch() {
 		equilibriumCycle:
-		for(int i = 0; i < equilibriumCondition; i++) {
+		for(int i = 0; i < equilibriumCondition && !Utilities.isTimeOver(); i++) {
+			System.out.println(i);
 			int randomNodeId = ThreadLocalRandom.current().nextInt(0, currentSolution.getNodes().size());
 			Node randomNode = currentSolution.getNodes().get(randomNodeId);
 			int randomX = ThreadLocalRandom.current().nextInt(0, currentSolution.getWidth() + 1);
@@ -67,6 +68,7 @@ public class SimulatedAnnealing {
 				}
 			}
 			*/
+			
 			 
 			
 			
@@ -79,6 +81,9 @@ public class SimulatedAnnealing {
 			
 			if(nextSolution.getCost() < currentSolution.getCost()) {
 				currentSolution = nextSolution;
+				if(currentSolution.getCost() < bestSolution.getCost()) {
+					bestSolution = new Solution(currentSolution);
+				}
 			} else {
 				double e = java.lang.Math.E;
 				double costDifference = Math.abs(nextSolution.getCost() - currentSolution.getCost());
@@ -91,6 +96,7 @@ public class SimulatedAnnealing {
 					currentSolution = nextSolution;
 				}
 			}
+			
 			
 			
 			
