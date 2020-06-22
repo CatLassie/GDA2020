@@ -28,13 +28,14 @@ public class Main {
 		
 
 		String fileName = "auto2";
-		boolean verbose = false;
+		boolean verbose = true;
 
 		String localDir = System.getProperty("user.dir").split("UpwardDrawingMavenProject")[0];
 		// String readPath = localDir + "\\instances\\vc-exact_"+instanceN+".gr";
 		// String writePath = localDir + "\\solutions\\vc-exact_"+instanceN+".gr";
 		String readPath = localDir + "instances\\" + fileName + ".json";
 		String writePath = localDir + "solutions\\" + fileName + "_solution.json";
+		String writePathOpt = localDir + "solutions\\" + fileName + "_solution_opt.json";
 		// out.println(readPath);
 		
 		GraphInstance inst = null;
@@ -54,8 +55,6 @@ public class Main {
 		Solution initialSolution = new Solution(inst, verbose);
 		initialSolution.computeInitialFeasibleSolution();
 		
-
-		
 		SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(new Solution(initialSolution),
 				   coolingRate, equilibriumCoefficient, stoppingCondition);
 
@@ -67,7 +66,7 @@ public class Main {
 		double annealingDiffCPU = (annealingEndCPU - annealingStartCPU)/1000000000;
 		System.out.println("CPU time: "+annealingDiffCPU+"\n");
 		
-		
+		out.println("Final cost is: " + bestSolution.getCost());
 		
 		// Write initial solution to file
 		try {
@@ -79,16 +78,16 @@ public class Main {
 		
 		// Write solution to file
 		try {
-			SolutionWriter.writeSolution(writePath, bestSolution.getGraphInstanceFromSolution());
+			SolutionWriter.writeSolution(writePathOpt, bestSolution.getGraphInstanceFromSolution());
 		} catch (IOException e) {
 			out.println("Sorry, couldnt write to file!");
 			System.exit(-1);
 		}
 		
 		
-		out.println(inst);
+		// out.println(inst);
 		// out.println("\n"+ solution.getGraphInstanceFromSolution());
-		out.println("\n" + solution);
+		// out.println("\n" + solution);
 	}
 
 }

@@ -15,6 +15,7 @@ public class SimulatedAnnealing {
 	private double coolingRate; // temperature cooling rate (e.g. 0.95)
 	private int equilibriumCondition; // number of moves before temperature adjustment (multiple of vertex number, e.g. n*(sqrt(n)))
 	private double stoppingCondition; // minimum temperature (e.g. 0.01)
+	private int timeCounter = 0;
 	
 	public SimulatedAnnealing (Solution solution, double coolingRate, int equilibriumCoefficient, double stoppingCondition) {
 		this.bestSolution = new Solution(solution);
@@ -26,19 +27,25 @@ public class SimulatedAnnealing {
 	}
 	
 	public Solution search() {
+		out.print("\ntime elapsed (sec): ");
 		Utilities.startTimer();
 		while((temperature > stoppingCondition) && !Utilities.isTimeOver()) {
 			oneTemperatureLevelSearch();
 			// System.out.println(temperature);
 			temperature = temperature * coolingRate;	
 		}
+		out.println("\n");
 		return bestSolution;
 	}
 	
 	private void oneTemperatureLevelSearch() {
 		equilibriumCycle:
 		for(int i = 0; i < equilibriumCondition && !Utilities.isTimeOver(); i++) {
-			System.out.println(i);
+			if(Utilities.elapsedTime() > timeCounter * 5) {
+				out.print(Utilities.elapsedTime() +", ");
+				timeCounter++;
+			}
+			// System.out.println(i);
 			int randomNodeId = ThreadLocalRandom.current().nextInt(0, currentSolution.getNodes().size());
 			Node randomNode = currentSolution.getNodes().get(randomNodeId);
 			int randomX = ThreadLocalRandom.current().nextInt(0, currentSolution.getWidth() + 1);

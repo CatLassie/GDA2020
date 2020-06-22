@@ -253,7 +253,7 @@ public class Solution {
 		for (int yi = y1 + 1; yi < y2; yi++) {
 			double xi = x1 + ((yi - y1) * invSlope);
 			// round to 4 decimal places
-			// xi = Math.round(xi * 10000.0) / 10000.0;
+			xi = Math.round(xi * 1000000.0) / 1000000.0;
 			if (xi % 1 == 0) {
 				int xi_int = (int) xi;
 				isFeasible = isFeasible && positionOccupied[yi][xi_int] != 2;
@@ -277,10 +277,12 @@ public class Solution {
 		for (int yi = y1 + 1; yi < y2; yi++) {
 			double xi = x1 + ((yi - y1) * invSlope);
 			// round to 4 decimal places
-			// xi = Math.round(xi * 10000.0) / 10000.0;
+			xi = Math.round(xi * 1000000.0) / 1000000.0;
 			if (xi % 1 == 0) {
 				int xi_int = (int) xi;
-				positionOccupied[yi][xi_int] = newValue;
+				if(positionOccupied[yi][xi_int] != 2) {
+					positionOccupied[yi][xi_int] = newValue;	
+				}
 			}
 		}
 	}

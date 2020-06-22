@@ -12,5 +12,10 @@ public class Utilities {
 		long currentTime = System.currentTimeMillis();
 		double diffSec = ((double) currentTime - timer)/1000;
 		return diffSec > 60;
-	}	
+	}
+	
+	public static double elapsedTime() {
+		long currentTime = System.currentTimeMillis();
+		return ((double) currentTime - timer)/1000;
+	}
 }
