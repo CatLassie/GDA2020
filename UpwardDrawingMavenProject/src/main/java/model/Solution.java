@@ -15,7 +15,7 @@ public class Solution {
 	// a list of nodes for each Y coordinate
 	private List<List<Node>> layerList;
 	private int topLayer = 0;
-	private boolean[][] positionOccupied;
+	private int[][] positionOccupied; // 0 -> free, 1 -> line, 2 -> node
 	private int cost;
 	private boolean verbose;
 	
@@ -44,7 +44,7 @@ public class Solution {
 			layerList.add(layer);
 		}
 		
-		positionOccupied = new boolean[topLayer + 1][width + 1];
+		positionOccupied = new int[topLayer + 1][width + 1];
 		for(int i = 0; i < topLayer + 1; i++) {
 			for(int j = 0; j < width + 1; j++) {
 				positionOccupied[i][j] = s.positionOccupied[i][j];
@@ -154,7 +154,7 @@ public class Solution {
 			out.println("\n");
 		}
 
-		positionOccupied = new boolean[topLayer + 1][width + 1];
+		positionOccupied = new int[topLayer + 1][width + 1];
 	}
 
 	// recursivley compute the length of longest [source -> node] path
@@ -204,7 +204,7 @@ public class Solution {
 							System.exit(-1);
 						}
 
-						if (!positionOccupied[node.y][x]) {
+						if (positionOccupied[node.y][x] == 0) {
 							boolean validPosition = true;
 							// check for each edge if it can be positioned with current x
 							for (int k = 0; k < node.pred.size(); k++) {
@@ -213,8 +213,16 @@ public class Solution {
 							}
 
 							if (validPosition) {
+								for (int k = 0; k < node.pred.size(); k++) {
+									Node pred = nodes.get(node.pred.get(k));
+									updateEdgeOccupyValue(pred.x, pred.y, node.x, node.y, 0);
+								}
+								for (int k = 0; k < node.pred.size(); k++) {
+									Node pred = nodes.get(node.pred.get(k));
+									updateEdgeOccupyValue(pred.x, pred.y, x, node.y, 1);
+								}
 								node.x = x;
-								positionOccupied[node.y][x] = true;
+								positionOccupied[node.y][x] = 2;								
 								break searchX;
 							}
 						}
@@ -245,21 +253,43 @@ public class Solution {
 		for (int yi = y1 + 1; yi < y2; yi++) {
 			double xi = x1 + ((yi - y1) * invSlope);
 			// round to 4 decimal places
-			xi = Math.round(xi * 10000.0) / 10000.0;
+			// xi = Math.round(xi * 10000.0) / 10000.0;
 			if (xi % 1 == 0) {
 				int xi_int = (int) xi;
-				isFeasible = isFeasible && !positionOccupied[yi][xi_int];
+				isFeasible = isFeasible && positionOccupied[yi][xi_int] != 2;
 			}
 		}
 
 		return isFeasible;
 	}
 	
+	// compute all points where edge crosses grid and occupied value
+	private void updateEdgeOccupyValue(int x1, int y1, int x2, int y2, int newValue) {
+		double invSlope;
+
+		if (x1 == x2) {
+			invSlope = 0;
+		} else {
+			double slope = (double) (y2 - y1) / (double) (x2 - x1);
+			invSlope = 1 / slope;
+		}
+
+		for (int yi = y1 + 1; yi < y2; yi++) {
+			double xi = x1 + ((yi - y1) * invSlope);
+			// round to 4 decimal places
+			// xi = Math.round(xi * 10000.0) / 10000.0;
+			if (xi % 1 == 0) {
+				int xi_int = (int) xi;
+				positionOccupied[yi][xi_int] = newValue;
+			}
+		}
+	}
+	
 	// check if node can be put on new X coordinate
 	public boolean isMoveFeasible(Node node, int newX) {
 		boolean isFeasible = true;
 		
-		if (!positionOccupied[node.y][newX]) {
+		if (positionOccupied[node.y][newX] == 0) {
 			// check for each edge if it can be positioned with current x
 			for (int i = 0; i < node.pred.size(); i++) {
 				Node pred = nodes.get(node.pred.get(i));
@@ -346,13 +376,31 @@ public class Solution {
 			}
 		}
 		
-		return currentCost - nextCost;
+		return nextCost - currentCost;
 	}
 	
 	// re-assign X coord of node, update positionOccupied and cost
 	public void performMove(Node node, int newX, int costChange) {
-		positionOccupied[node.y][node.x] = false;
-		positionOccupied[node.y][newX] = true;
+		positionOccupied[node.y][node.x] = 0;
+		positionOccupied[node.y][newX] = 2;
+		
+		for (int i = 0; i < node.pred.size(); i++) {
+			Node pred = nodes.get(node.pred.get(i));
+			updateEdgeOccupyValue(pred.x, pred.y, node.x, node.y, 0);
+		}
+		for (int i = 0; i < node.succ.size(); i++) {
+			Node succ = nodes.get(node.succ.get(i));
+			updateEdgeOccupyValue(node.x, node.y, succ.x, succ.y, 0);
+		}
+		for (int i = 0; i < node.pred.size(); i++) {
+			Node pred = nodes.get(node.pred.get(i));
+			updateEdgeOccupyValue(pred.x, pred.y, newX, node.y, 1);
+		}
+		for (int i = 0; i < node.succ.size(); i++) {
+			Node succ = nodes.get(node.succ.get(i));
+			updateEdgeOccupyValue(newX, node.y, succ.x, succ.y, 1);
+		}
+		
 		node.x = newX;
 		cost = cost + costChange;
 	}
