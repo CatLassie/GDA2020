@@ -17,8 +17,9 @@ public class SimulatedAnnealing {
 	private double stoppingCondition; // minimum temperature (e.g. 0.01)
 	private int timeLimit;
 	private int timeCounter = 0;
+	private boolean verbose;
 	
-	public SimulatedAnnealing (Solution solution, double coolingRate, int equilibriumCoefficient, double stoppingCondition, int timeLimit) {
+	public SimulatedAnnealing (Solution solution, double coolingRate, int equilibriumCoefficient, double stoppingCondition, int timeLimit, boolean verbose) {
 		this.bestSolution = new Solution(solution);
 		this.currentSolution = solution;
 		this.temperature = solution.getNodes().size();
@@ -26,30 +27,37 @@ public class SimulatedAnnealing {
 		this.equilibriumCondition = equilibriumCoefficient * solution.getNodes().size();
 		this.stoppingCondition = stoppingCondition;
 		this.timeLimit = timeLimit;
+		this.verbose = verbose;
 	}
 	
 	public Solution search() {
-		out.print("\ntime elapsed (sec): ");
+		if(verbose) {
+			out.print("\ntime elapsed (sec): ");	
+		}
 		Utilities.startTimer();
 		while((temperature > stoppingCondition) && !Utilities.isTimeOver(timeLimit)) {
 			oneTemperatureLevelSearch();
 			// System.out.println(temperature);
 			temperature = temperature * coolingRate;	
 		}
-		out.println("\n");
+		if(verbose) {
+			out.println("\n");
+		}
 		return bestSolution;
 	}
 	
 	private void oneTemperatureLevelSearch() {
 		equilibriumCycle:
 		for(int i = 0; i < equilibriumCondition && !Utilities.isTimeOver(timeLimit); i++) {
-			if(Utilities.elapsedTime() > timeCounter * 5) {
-				if((timeCounter+1) % 15 == 0) {
-					out.println(Math.round(Utilities.elapsedTime()) +", ");	
-				} else {
-					out.print(Math.round(Utilities.elapsedTime()) +", ");	
+			if(verbose) {
+				if(Utilities.elapsedTime() > timeCounter * 5) {
+					if((timeCounter+1) % 15 == 0) {
+						out.println(Math.round(Utilities.elapsedTime()) +", ");	
+					} else {
+						out.print(Math.round(Utilities.elapsedTime()) +", ");	
+					}
+					timeCounter++;
 				}
-				timeCounter++;
 			}
 			// System.out.println(i);
 			int randomNodeId = ThreadLocalRandom.current().nextInt(0, currentSolution.getNodes().size());

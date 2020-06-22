@@ -57,17 +57,20 @@ public class Main {
 		initialSolution.computeInitialFeasibleSolution();
 		
 		SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(new Solution(initialSolution),
-				   coolingRate, equilibriumCoefficient, stoppingCondition, timeLimit);
-
-		System.out.println("SIMULATED ANNEALING:");
-		System.out.println(simulatedAnnealing+"");
+				   coolingRate, equilibriumCoefficient, stoppingCondition, timeLimit, verbose);
+		if(verbose) {
+			System.out.println("SIMULATED ANNEALING:");
+			System.out.println(simulatedAnnealing+"");	
+		}
 		double annealingStartCPU = ManagementFactory.getThreadMXBean().getThreadCpuTime(Thread.currentThread().getId());
 		Solution bestSolution = simulatedAnnealing.search();
 		double annealingEndCPU = ManagementFactory.getThreadMXBean().getThreadCpuTime(Thread.currentThread().getId());
 		double annealingDiffCPU = (annealingEndCPU - annealingStartCPU)/1000000000;
-		System.out.println("CPU time: "+annealingDiffCPU+"\n");
+		if(verbose) {
+			System.out.println("CPU time: "+annealingDiffCPU+"\n");
+		}
 		
-		out.println("Final cost is: " + bestSolution.getCost());
+		out.println("final cost is: " + bestSolution.getCost());
 		
 		// Write initial solution to file
 		try {

@@ -117,9 +117,7 @@ public class Solution {
 		computeLayersForNodes();
 		positionGraphOnGrid();
 		calculateCost();
-		if(verbose) {
-			out.println("initial cost is: "+ cost +"\n");
-		}
+		out.println("initial cost is: "+ cost +"\n");
 	}
 
 	// assign Y coordinate to all nodes and add nodes to layerList
