@@ -252,10 +252,106 @@ public class Solution {
 		return isFeasible;
 	}
 	
-	// TODO
 	// check if node can be put on new X coordinate
-	public boolean isMoveFeasible(Node node, int newX) { 
-		return false;
+	public boolean isMoveFeasible(Node node, int newX) {
+		boolean isFeasible = true;
+		
+		if (!positionOccupied[node.y][newX]) {
+			// check for each edge if it can be positioned with current x
+			for (int i = 0; i < node.pred.size(); i++) {
+				Node pred = nodes.get(node.pred.get(i));
+				isFeasible = isFeasible && isEdgeFeasible(pred.x, pred.y, newX, node.y);
+			}
+			for (int i = 0; i < node.succ.size(); i++) {
+				Node succ = nodes.get(node.succ.get(i));
+				isFeasible = isFeasible && isEdgeFeasible(newX, node.y, succ.x, succ.y);
+			}
+		} else {
+			isFeasible = false;
+		}
+		
+		return isFeasible;
+	}
+	
+	// calculate how move will change solution cost with incremental evaluation
+	// edges only taken whose coordinates are in a small rectangle 
+	public int computeMoveCost(Node node, int newX) {
+		int minX = Math.min(node.x, newX);
+		int maxX = Math.max(node.x, newX);
+		
+		int minY = node.y;
+		for(int i = 0; i < node.pred.size(); i++) {
+			int predY = nodes.get(node.pred.get(i)).y;
+			if(predY < minY) {
+				minY = predY;
+			}
+		}
+		
+		int maxY = node.y;
+		for(int i = 0; i < node.succ.size(); i++) {
+			int succY = nodes.get(node.succ.get(i)).y;
+			if(succY > maxY) {
+				maxY = succY;
+			}
+		}
+		
+		// completely above/under/leftOf/rightOf
+		ArrayList<Edge> relevantEdges = new ArrayList<Edge>();
+		for(int i = 0; i < edges.size(); i++) {
+			Edge edge = edges.get(i);
+			Node source = nodes.get(edge.source);
+			Node target = nodes.get(edge.target);
+			boolean above = source.y >= maxY && target.y >= maxY;
+			boolean under = source.y <= minY && target.y <= minY;
+			boolean leftOf = source.x <= minX && target.x <= minX;
+			boolean rightOf = source.x >= maxX && target.x >= maxX;
+			if(!(above || under || leftOf || rightOf)) {
+				relevantEdges.add(edge);
+			}
+		}
+		
+		int currentCost = 0;
+		for(int i = 0; i < relevantEdges.size() - 1; i++) {
+			for(int j = i + 1; j < relevantEdges.size(); j++) {
+				Edge edge1 = relevantEdges.get(i);
+				Edge edge2 = relevantEdges.get(j);
+				Node source1 = nodes.get(edge1.source);
+				Node target1 = nodes.get(edge1.target);
+				Node source2 = nodes.get(edge2.source);
+				Node target2 = nodes.get(edge2.target);
+				if(doEdgesIntersect(source1.x,source1.y, target1.x,target1.y, source2.x,source2.y, target2.x,target2.y)) {
+					currentCost = currentCost + 1;
+				}
+			}
+		}
+		
+		int nextCost = 0;
+		for(int i = 0; i < relevantEdges.size() - 1; i++) {
+			for(int j = i + 1; j < relevantEdges.size(); j++) {
+				Edge edge1 = relevantEdges.get(i);
+				Edge edge2 = relevantEdges.get(j);
+				Node source1 = nodes.get(edge1.source);
+				Node target1 = nodes.get(edge1.target);
+				Node source2 = nodes.get(edge2.source);
+				Node target2 = nodes.get(edge2.target);
+				if(doEdgesIntersect(source1.id == node.id ? newX : source1.x, source1.y,
+									target1.id == node.id ? newX : target1.x, target1.y,
+									source2.id == node.id ? newX : source2.x, source2.y,
+									target2.id == node.id ? newX : target2.x, target2.y)) {
+					nextCost = nextCost + 1;
+				}
+			}
+		}
+		
+		return currentCost - nextCost;
+	}
+	
+	// re-assign X coord of node, update positionOccupied and cost
+	public void performMove(Node node, int newX, int costChange) {
+		positionOccupied[node.y][node.x] = false;
+		positionOccupied[node.y][newX] = true;
+		node.x = newX;
+		cost = cost + costChange;
 	}
 		
 	// calculate total edge crossings from scratch
@@ -266,7 +362,13 @@ public class Solution {
 		
 		for(int i = 0; i < edges.size() - 1; i++) {
 			for(int j = i + 1; j < edges.size(); j++) {
-				if(doEdgesIntersect(edges.get(i), edges.get(j))) {
+				Edge edge1 = edges.get(i);
+				Edge edge2 = edges.get(j);
+				Node source1 = nodes.get(edge1.source);
+				Node target1 = nodes.get(edge1.target);
+				Node source2 = nodes.get(edge2.source);
+				Node target2 = nodes.get(edge2.target);
+				if(doEdgesIntersect(source1.x,source1.y, target1.x,target1.y, source2.x,source2.y, target2.x,target2.y)) {
 					cost = cost + 1;
 				}
 			}
@@ -277,19 +379,15 @@ public class Solution {
 		}
 	}
 	
-	private boolean doEdgesIntersect(Edge edge1, Edge edge2) {
-		Node source1 = nodes.get(edge1.source);
-		Node target1 = nodes.get(edge1.target);
-		Node source2 = nodes.get(edge2.source);
-		Node target2 = nodes.get(edge2.target);
-		boolean shareSource = source1.x == source2.x && source1.y == source2.y;
-		boolean shareTarget = target1.x == target2.x && target1.y == target2.y;
-		boolean sequential1 = target1.x == source2.x && target1.y == source2.y;
-		boolean sequential2 = source1.x == target2.x && source1.y == target2.y;
+	private boolean doEdgesIntersect(int source1x,int source1y,int target1x,int target1y,int source2x,int source2y,int target2x,int target2y) {
+		boolean shareSource = source1x == source2x && source1y == source2y;
+		boolean shareTarget = target1x == target2x && target1y == target2y;
+		boolean sequential1 = target1x == source2x && target1y == source2y;
+		boolean sequential2 = source1x == target2x && source1y == target2y;
 		if(shareSource || shareTarget || sequential1 || sequential2) {
 			return false;
 		}
-		return Line2D.linesIntersect(source1.x,source1.y, target1.x,target1.y, source2.x,source2.y, target2.x,target2.y);
+		return Line2D.linesIntersect(source1x,source1y, target1x,target1y, source2x,source2y, target2x,target2y);
 	}
 
 	public GraphInstance getGraphInstanceFromSolution() {
