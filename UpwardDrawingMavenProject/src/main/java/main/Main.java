@@ -13,7 +13,7 @@ import util.SolutionWriter;
 public class Main {
 	public static void main(String[] args) {
 		String fileName = args[0];
-		boolean verbose = Boolean.parseBoolean(args[1]);
+		boolean verbose = args.length > 1 ? Boolean.parseBoolean(args[1]) : true;
 		int timeLimit = args.length > 2 ? Integer.parseInt(args[2]) : 180 ;
 		double coolingRate = args.length > 3 ? Double.parseDouble(args[3]) : 0.95;
 		double stoppingCondition = args.length > 4 ? Double.parseDouble(args[4]) : 0.01;
