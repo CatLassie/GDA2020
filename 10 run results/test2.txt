@@ -1,0 +1,6 @@
+inst: test2
+initial cost: 17
+best cost: 12
+mean cost: 12.0
+stdDev: 0.0
+mean cpu time: 0.01875

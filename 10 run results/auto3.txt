@@ -1,0 +1,6 @@
+inst: auto3
+initial cost: 270
+best cost: 6
+mean cost: 7.7
+stdDev: 3.796
+mean cpu time: 0.5875

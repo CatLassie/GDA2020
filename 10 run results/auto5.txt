@@ -1,0 +1,6 @@
+inst: auto5
+initial cost: 733
+best cost: 32
+mean cost: 32.0
+stdDev: 0.0
+mean cpu time: 10.309375

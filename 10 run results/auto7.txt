@@ -1,0 +1,6 @@
+inst: auto7
+initial cost: 5734
+best cost: 260
+mean cost: 315.2
+stdDev: 60.645
+mean cpu time: 38.10625

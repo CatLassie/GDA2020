@@ -1,0 +1,6 @@
+inst: auto4
+initial cost: 172
+best cost: 11
+mean cost: 14.1
+stdDev: 1.758
+mean cpu time: 0.7125

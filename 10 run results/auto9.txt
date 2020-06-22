@@ -1,0 +1,6 @@
+inst: auto9
+initial cost: 6362
+best cost: 6223
+mean cost: 6246.333333333333
+stdDev: 17.745
+mean cpu time: 173.32291666666666

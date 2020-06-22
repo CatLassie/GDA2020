@@ -1,0 +1,6 @@
+inst: test1
+initial cost: 0
+best cost: 0
+mean cost: 0.0
+stdDev: 0.0
+mean cpu time: 0.0015625

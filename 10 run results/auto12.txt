@@ -1,0 +1,6 @@
+inst: auto12
+initial cost: 1269418
+best cost: 1268500
+mean cost: 1268925.0
+stdDev: 364.903
+mean cpu time: 177.16145833333334

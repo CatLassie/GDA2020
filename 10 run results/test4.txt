@@ -1,0 +1,6 @@
+inst: test4
+initial cost: 73
+best cost: 27
+mean cost: 27.3
+stdDev: 0.9
+mean cpu time: 0.0640625

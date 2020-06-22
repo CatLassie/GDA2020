@@ -1,0 +1,6 @@
+inst: auto1
+initial cost: 21
+best cost: 14
+mean cost: 14.0
+stdDev: 0.0
+mean cpu time: 0.00625

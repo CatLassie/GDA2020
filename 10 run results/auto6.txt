@@ -1,0 +1,6 @@
+inst: auto6
+initial cost: 2279
+best cost: 332
+mean cost: 358.2
+stdDev: 10.216
+mean cpu time: 34.4015625
