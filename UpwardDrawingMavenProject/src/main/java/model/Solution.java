@@ -265,6 +265,7 @@ public class Solution {
 	
 	// compute all points where edge crosses grid and occupied value
 	private void updateEdgeOccupyValue(int x1, int y1, int x2, int y2, int newValue) {
+		/*
 		double invSlope;
 
 		if (x1 == x2) {
@@ -277,12 +278,13 @@ public class Solution {
 		for (int yi = y1 + 1; yi < y2; yi++) {
 			double xi = x1 + ((yi - y1) * invSlope);
 			// round to 4 decimal places
-			// xi = Math.round(xi * 10000.0) / 10000.0;
+			xi = Math.round(xi * 10000.0) / 10000.0;
 			if (xi % 1 == 0) {
 				int xi_int = (int) xi;
 				positionOccupied[yi][xi_int] = newValue;
 			}
 		}
+		*/
 	}
 	
 	// check if node can be put on new X coordinate
