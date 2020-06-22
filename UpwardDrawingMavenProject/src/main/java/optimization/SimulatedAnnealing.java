@@ -46,9 +46,10 @@ public class SimulatedAnnealing {
 				continue equilibriumCycle;
 			}
 			
+			/*
 			int costChange = currentSolution.computeMoveCost(randomNode, randomX);
 			int newCost = currentSolution.getCost() + costChange;
-			
+						
 			if(newCost < currentSolution.getCost()) {
 				currentSolution.performMove(randomNode, randomX, costChange);
 			} else {
@@ -56,19 +57,25 @@ public class SimulatedAnnealing {
 				double costDifference = Math.abs(costChange);
 				double metrolopisCriterion = Math.pow(e, -(costDifference / temperature));
 				double probability = (double)ThreadLocalRandom.current().nextInt(0, 1000)/1000;
-				/*
-				if(i == 0) {
-					System.out.println(metrolopisCriterion);
-				}
-				*/
+				
+				//if(i == 0) {
+				//	System.out.println(metrolopisCriterion);
+				//}
+				
 				if(probability < metrolopisCriterion) {
 					currentSolution.performMove(randomNode, randomX, costChange);
 				}
 			}
+			*/
+			 
 			
 			
-			/*
-			Solution nextSolution = neighbourhood.move(currentSolution);
+
+			
+			Solution nextSolution = new Solution(currentSolution);
+			randomNode = nextSolution.getNodes().get(randomNodeId);
+			nextSolution.performMove(randomNode, randomX, 0);
+			nextSolution.calculateCost();
 			
 			if(nextSolution.getCost() < currentSolution.getCost()) {
 				currentSolution = nextSolution;
@@ -77,12 +84,19 @@ public class SimulatedAnnealing {
 				double costDifference = Math.abs(nextSolution.getCost() - currentSolution.getCost());
 				double metrolopisCriterion = Math.pow(e, -(costDifference / temperature));
 				double probability = (double)ThreadLocalRandom.current().nextInt(0, 1000)/1000;
-
+				// if(i == 0) {
+				//	System.out.println(metrolopisCriterion);
+				// }
 				if(probability < metrolopisCriterion) {
 					currentSolution = nextSolution;
 				}
 			}
-			*/
+			
+			
+			
+			
+			
+			
 		}
 		
 	}
